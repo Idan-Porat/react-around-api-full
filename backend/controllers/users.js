@@ -1,7 +1,10 @@
+const jwt = require('jsonwebtoken'); // importing the jsonwebtoken module
+const bcrypt = require('bcryptjs'); // importing bcrypt
 const User = require('../models/users');
 
 const STAT_CODE_200 = 200;
 const ERR_CODE_400 = 400;
+const ERR_CODE_401 = 401;
 const ERR_CODE_404 = 404;
 const ERR_CODE_500 = 500;
 
@@ -49,8 +52,21 @@ module.exports.getUser = (req, res) => {
 };
 
 module.exports.createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.create({ name, about, avatar })
+  const {
+    email,
+    name,
+    about,
+    avatar,
+  } = req.body;
+  // hashing the password
+  bcrypt.hash(req.body.password, 10)
+    .then((hash) => User.create({
+      email,
+      password: hash,
+      name,
+      about,
+      avatar,
+    }))
     .orFail(() => {
       const error = new Error('user not found');
       error.statusCode = ERR_CODE_404;
@@ -113,5 +129,23 @@ module.exports.updateAvatar = (req, res) => {
       } else {
         res.status(ERR_CODE_500).send({ err } || 'internal server error');
       }
+    });
+};
+
+module.exports.login = (req, res) => {
+  const { email, password } = req.body;
+
+  return User.findUserByCredentials(email, password)
+    .then((user) => {
+      // we're creating a token
+      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
+
+      // we return the token
+      res.send({ token });
+    })
+    .catch((err) => {
+      res
+        .status(ERR_CODE_401)
+        .send({ message: err.message });
     });
 };
