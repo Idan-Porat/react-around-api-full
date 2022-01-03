@@ -1,0 +1,39 @@
+.elements__delete-button {
+    position:absolute;
+    height:18px;
+    width:19.3px;
+    background-color:transparent;
+    margin-top:18px;
+    margin-left:249px;
+    border:none;
+    cursor:pointer;
+    transition:0.1s ease-in;
+    padding:0px;
+    z-index:1;
+}
+
+.elements__delete-button:hover {
+    opacity: 0.5;
+}
+
+.elements__delete-button::before {
+    position:absolute;
+    background-image:url(../../../images/trash-top.png);
+    background-repeat:no-repeat;
+    content:"";
+    top:0px;
+    right: 0;
+    width:18px;
+    height:5px;
+}
+
+.elements__delete-button::after {
+    position:absolute;
+    content:"";
+    background-repeat:no-repeat;
+    background-image:url(../../../images/trash-body.png);
+    top:4.5px;
+    right:1.5px;
+    width:15.44px;
+    height:13.5px;
+}

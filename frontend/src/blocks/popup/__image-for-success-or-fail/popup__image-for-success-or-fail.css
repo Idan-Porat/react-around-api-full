@@ -1,0 +1,15 @@
+.popup__image-for-success-or-fail {
+    background-image:url(../../../images/failLogin.png);
+    margin: 60px 115px;
+}
+
+.popup__image-for-success-or-fail:hover {
+    opacity:1;
+}
+
+@media screen and (min-width: 320px) and (max-width:972px) {
+    .popup__image-for-success-or-fail {
+        margin-top:50px;
+        margin-bottom:40px;
+    }
+}

@@ -1,0 +1,9 @@
+.header__texts-container {
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    column-gap:22px;
+    align-items:center;
+    justify-content:space-between;
+    max-width:230px;
+}

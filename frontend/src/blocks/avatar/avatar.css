@@ -1,0 +1,15 @@
+.avatar {
+    position:relative;
+    height:120px;
+    width:120px;
+    border-radius:50%;
+    margin-right:30px;
+    opacity:1;
+    transition:opacity 1s ease-in-out 0s;
+}
+
+@media screen and (min-width: 320px) and (max-width:972px) {
+    .avatar {
+        margin:auto;
+    }
+}

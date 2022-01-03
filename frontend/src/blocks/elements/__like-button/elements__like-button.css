@@ -1,0 +1,22 @@
+.elements__like-button {
+    display:flex;
+    height:19px;
+    width:21px;
+    justify-content:center;
+    align-items:center;
+    background-size:100% 100%;
+    padding:0;
+    background-repeat:no-repeat;
+    margin-right:18px;
+    border:none;
+    object-fit:contain;
+    box-sizing:border-box;
+    background-color:transparent;
+    cursor:pointer;
+    opacity:1;
+    transition:0.1s ease-in;
+}
+
+.elements__like-button:hover {
+    opacity: 0.5;
+}

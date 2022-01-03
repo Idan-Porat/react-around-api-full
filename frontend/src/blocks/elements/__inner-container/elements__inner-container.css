@@ -1,0 +1,8 @@
+.elements__inner-container {
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+    background:#ffffff;
+    border-radius:10px;
+    width:282px;
+}

@@ -1,0 +1,9 @@
+.user-form__set {
+    width:358px;
+}
+
+@media screen and (min-width: 320px) and (max-width:972px) {
+    .user-form__set {
+        max-width:260px;
+    }
+}

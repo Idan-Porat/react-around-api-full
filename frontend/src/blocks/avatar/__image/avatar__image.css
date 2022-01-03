@@ -1,0 +1,16 @@
+.avatar__image {
+    position:relative;
+    z-index:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    background-repeat:no-repeat;
+    background-size:100% 100%;
+    border-radius:50%;
+    transition:opacity 1s ease-in-out 0s;
+    opacity:1;
+  }
+
+.avatar:hover .avatar__image {
+    opacity:0.2;
+  }

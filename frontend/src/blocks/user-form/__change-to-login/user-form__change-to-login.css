@@ -1,0 +1,28 @@
+.user-form__change-to-login {
+    font-style:normal;
+    background-color:#000000;
+    text-align:center;
+    max-width:358px;
+    color:#ffffff;
+    border:none;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    transition:0.2s ease-in;
+    cursor:pointer;
+    height:17px;
+    width:100%;
+    color:#FFFFFF;
+    opacity:1;
+}
+
+.user-form__change-to-login:hover {
+    opacity:0.8;
+}
+
+@media screen and (min-width: 320px) and (max-width:972px) {
+    .user-form__change-to-login {
+        max-width:260px;
+    }
+}
+

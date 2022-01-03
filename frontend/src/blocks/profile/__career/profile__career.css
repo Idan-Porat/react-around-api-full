@@ -1,0 +1,25 @@
+.profile__career {
+    grid-area:career;
+    font-style:normal;
+    font-weight:normal;
+    margin:0px;
+    font-size:18px;
+    max-width:415px;
+    line-height:22px;
+    color:#FFFFFF;
+    grid-column-end:span 2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@media screen and (min-width: 320px) and (max-width:972px) {
+    .profile__career {
+        font-size:14px;
+        line-height:17px;
+        max-width:282px;
+        margin:0 auto 0 auto;
+        justify-self:end;
+        text-align:center;
+    }
+}

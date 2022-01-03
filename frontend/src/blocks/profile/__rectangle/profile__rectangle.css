@@ -1,0 +1,29 @@
+.profile__rectangle {
+    min-width:150px;
+    height:50px;
+    border: 2px solid #FFFFFF;
+    box-sizing: border-box;
+    margin:35px 0px 35px 0;
+    background-image:url(../../../images/rectangle-pic.svg);
+    background-color:transparent;
+    background-position:center;
+    background-repeat: no-repeat;
+    border-radius: 2px;
+    justify-self:flex-end;
+    cursor:pointer;
+    transition:0.1s ease-in;
+}
+
+.profile__rectangle:hover {
+    opacity:0.6;
+}
+
+@media screen and (min-width: 320px) and (max-width:972px) {
+    .profile__rectangle {
+        min-width:130px;
+        text-align:center;
+        max-width:282px;
+        margin:0;
+        justify-self:stretch;
+    }
+}
