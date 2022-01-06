@@ -4,8 +4,9 @@ const bodyParser = require('body-parser');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const auth = require('./middleware/auth');
-const { createUser, login } = require('./controllers/users');
-
+const { register, login } = require('./controllers/users');
+const { errors } = require('celebrate');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { PORT = 3000, BASE_PATH } = process.env;
 const app = express();
 
@@ -13,21 +14,32 @@ app.post(bodyParser.urlencoded({ extended: false }));
 app.post(bodyParser.json());
 
 mongoose.connect('mongodb://localhost:27017/aroundb');
+app.use(requestLogger);
 
-app.post('/signup', createUser);
+app.post('/signup', register);
 app.post('/signin', login);
 
 app.use('/', auth, userRouter);
 app.use('/', auth, cardRouter);
 
-app.use((req, res, next) => {
-  res.status(404).send({ message: `Route ${req.url} Not found.` });
-  next();
+app.use(errorLogger); // enabling the error logger
+app.use(errors());
+
+app.use((err, req, res, next) => {
+  res.status(err.statusCode).send({ message: err.message });
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).send({ message: 'Internal Server Error.' });
-  next();
+  // if an error has no status, display 500
+  const { statusCode = 500, message } = err;
+  res
+    .status(statusCode)
+    .send({
+      // check the status and display a message based on it
+      message: statusCode === 500
+        ? 'An error occurred on the server'
+        : message
+    });
 });
 
 app.listen(PORT, () => {

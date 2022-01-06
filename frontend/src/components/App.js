@@ -218,9 +218,9 @@ function App() {
       Auth
         .checkToken(jwt)
         .then((res) => {
-          navigate('/')
           setLoggedIn(true);
-          setEmail(res.data.email);
+          setEmail({ email: res.data.email });
+          navigate('/')
         })
         .catch((error) => {
           console.log(`Error: ${error}`);

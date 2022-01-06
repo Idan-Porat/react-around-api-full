@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken'); // importing the jsonwebtoken module
 const bcrypt = require('bcryptjs'); // importing bcrypt
 const User = require('../models/users');
-
+const errorhandler = require('../middleware/errorHandler')
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 const STAT_CODE_200 = 200;
@@ -31,26 +31,16 @@ module.exports.getAllUsers = (req, res) => {
     });
 };
 
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   const { userId } = req.params;
-  User.findById(userId)
-    .orFail(() => {
-      const error = new Error('user not found');
-      error.statusCode = ERR_CODE_404;
-      throw error;
-    })
+  User.findById({ _id: userId })
     .then((user) => {
-      res.status(STAT_CODE_200).send({ data: `${user.name} is a ${user.about}` });
-    })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(ERR_CODE_400).send(err);
-      } else if (err.statusCode === ERR_CODE_404) {
-        res.status(ERR_CODE_404).send(err);
-      } else {
-        res.status(ERR_CODE_500).send({ err } || 'internal server error');
+      if (!user) {
+        throw new errorhandler('No user with matching ID found', 404);
       }
-    });
+      res.send(user);
+    })
+    .catch(next);
 };
 
 module.exports.createUser = (req, res, next) => {
@@ -69,9 +59,9 @@ module.exports.createUser = (req, res, next) => {
     }))
     .then((user) => {
       if (!user) {
-        throw new Status400Errors('Unsuccessful Request');
+        throw new errorhandler('Unsuccessful Request', 400);
       }
-      res.status(200).send({ message: 'Success!' });
+      res.send(user);
     })
     .catch(next);
 };

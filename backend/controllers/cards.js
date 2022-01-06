@@ -26,7 +26,7 @@ module.exports.getCards = (req, res) => {
     });
 };
 
-module.exports.createCard = (req, res) => {
+module.exports.register = (req, res) => {
   const { _id } = req.user;
   const {
     name, imageLink,
