@@ -33,27 +33,29 @@ class Auth {
     console.log(email)
     return fetch(`${this._baseURL}/signin`, {
       method: 'POST',
-      headers:
-      {
-        "Content-Type": "application/json",
+      headers: {
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ password, email })
     })
       .then((res) => this._getResponseData(res))
       .then((data) => {
-        if (data.token) {
-          localStorage.setItem('jwt', data.token);
+        if (data) {
+          localStorage.setItem("jwt", data);
           return data;
+        } else {
+          throw new Error('the user email not found')
         }
       })
   };
 
   checkToken = (token) => {
+    console.log(token)
     return fetch(`${this._baseURL}/users/me`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
+        authorization: `Bearer ${token}`
       }
     })
       .then((res) => this._getResponseData(res))
@@ -66,9 +68,9 @@ class Auth {
 
 
 export default new Auth({
-  baseURL: "https://register.nomoreparties.co",
+  baseURL: "http://localhost:3000",
   headers: {
-    "Accept": localStorage.getItem('token'),
-    'Content-Type': 'application/json',
-  },
+    authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    "Content-Type": "application/json"
+  }
 });

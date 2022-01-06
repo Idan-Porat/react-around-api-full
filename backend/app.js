@@ -1,27 +1,24 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv').config();
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
-const { createUser, login } = require('./controllers/users');
 const auth = require('./middleware/auth');
+const { createUser, login } = require('./controllers/users');
 
 const { PORT = 3000, BASE_PATH } = process.env;
 const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.post(bodyParser.urlencoded({ extended: false }));
+app.post(bodyParser.json());
 
 mongoose.connect('mongodb://localhost:27017/aroundb');
 
-app.post('/signin', login);
 app.post('/signup', createUser);
+app.post('/signin', login);
 
-app.use(auth); // all the routes below this string will be secured
-
-app.use('/', userRouter);
-app.use('/', cardRouter);
+app.use('/', auth, userRouter);
+app.use('/', auth, cardRouter);
 
 app.use((req, res, next) => {
   res.status(404).send({ message: `Route ${req.url} Not found.` });
@@ -34,6 +31,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log('Link to the server');
+  console.log(`Link to the server ${PORT}`);
   console.log(BASE_PATH);
 });

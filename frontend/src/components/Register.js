@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 import Auth from "../utils/auth";
 function Register(props) {
 
-    const { handleRegisterd } = props
+    const { handleRegisterd, loggedIn } = props
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const history = useNavigate();
+    const navigate = useNavigate();
     
     const handleChange = (e) => {
         const { email,  password } = e.target;
@@ -22,7 +22,7 @@ function Register(props) {
         Auth.register(email, password)
             .then((res) => {
                 if (res) {
-                    history('/signin')
+                    navigate('/signin')
                     handleRegisterd()
                 } else {
                     console.log('Somthing went wrong');
@@ -35,9 +35,6 @@ function Register(props) {
             })
     }
 
-
-
-    const { loggedIn } = props;
     return (
         
         <AuthForm

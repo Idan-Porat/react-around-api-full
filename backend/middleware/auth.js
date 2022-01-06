@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 
 const handleAuthError = (res) => {
   res
@@ -7,17 +8,20 @@ const handleAuthError = (res) => {
 };
 
 const extractBearerToken = (header) => {
-  header.replace('Bearer ', '');
+  console.log(header)
+  return header.replace('Bearer ', '');
 };
 
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
+  console.log(authorization);
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
     return handleAuthError(res);
   }
 
   const token = extractBearerToken(authorization);
+  console.log(token)
   let payload;
 
   try {
@@ -28,5 +32,5 @@ module.exports = (req, res, next) => {
 
   req.user = payload; // adding the payload to the Request object
 
-  return next(); // passing the request further along
+  next(); // passing the request further along
 };

@@ -42,17 +42,20 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
         return Promise.reject(new Error('Incorrect email or password'));
       }
 
-      return bcrypt.compare(password, user.password)
+      return bcrypt.compare(password, user.password, ((err) => {
+        if (!password) {
+          return Promise.reject(new Error(err.name));
+        }
+        return password;
+      }))
         .then((matched) => {
           if (!matched) {
             return Promise.reject(new Error('Incorrect email or password'));
           }
-
-          return user; // now user is available
+          return user;
         });
     });
 };
-
 userSchema.path('avatar').validate((val) => {
   const urlRegex = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/;
   return urlRegex.test(val);

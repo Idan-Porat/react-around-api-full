@@ -2,8 +2,6 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import headerLogo from '../images/logo.svg';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
-
 
 function Header(props) {
 

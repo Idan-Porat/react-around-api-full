@@ -53,37 +53,27 @@ module.exports.getUser = (req, res) => {
     });
 };
 
-module.exports.createUser = (req, res) => {
-  const {
-    email,
-    name,
-    about,
-    avatar,
-  } = req.body;
-  // hashing the password
-  bcrypt.hash(req.body.password, 10)
-    .then((hash) => User.create({
-      email,
-      password: hash,
-      name,
-      about,
-      avatar,
-    }))
-    .orFail(() => {
-      const error = new Error('user not found');
-      error.statusCode = ERR_CODE_404;
-      throw error;
+module.exports.createUser = (req, res, next) => {
+  const { email, password } = req.body;
+  bcrypt
+    .hash(password, 10)
+    .then((password) => {
+      User.create({ email, password });
     })
-    .then((user) => res.status(STAT_CODE_200).send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(ERR_CODE_400).send(err);
-      } else if (err.statusCode === ERR_CODE_404) {
-        res.status(ERR_CODE_404).send(err);
-      } else {
-        res.status(ERR_CODE_500).send({ err } || 'internal server error');
+    .then((data) => res.send({
+      email: data.email,
+      name: data.name,
+      about: data.about,
+      avatar: data.avatar,
+      _id: data._id,
+    }))
+    .then((user) => {
+      if (!user) {
+        throw new Status400Errors('Unsuccessful Request');
       }
-    });
+      res.status(200).send({ message: 'Success!' });
+    })
+    .catch(next);
 };
 
 module.exports.updateProfile = (req, res) => {
@@ -140,7 +130,7 @@ module.exports.login = (req, res) => {
   return User.findUserByCredentials(email, password)
     .then((user) => {
       // we're creating a token
-      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' });
 
       // we return the token
       res.send({ token });

@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState, useEffect } from 'react';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { Route, Routes, useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
@@ -14,7 +14,7 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup.js';
 import ImagePopup from './ImagePopup';
 import Footer from './Footer';
-import { api } from '../utils/api.js';
+import Api from '../utils/api.js';
 import DeletePhotoPopup from './DeletePhotoPopup';
 import failToLog from "../images/failLogin.png";
 import successToLog from "../images/successLogin.png";
@@ -23,84 +23,86 @@ function App() {
 
   const navigate = useNavigate();
 
-  const [cards, setCards] = React.useState([]);
+  const [cards, setCards] = useState([]);
 
-  const [currentUser, setCurrentUser] = React.useState({});
+  const [currentUser, setCurrentUser] = useState({});
 
   // Edit profile popup state.
-  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
+  const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
 
   // Message about the login popup state.
-  const [isMessageOfRegPopupOpen, setIsMessageOfRegPopupOpen] = React.useState(false);
+  const [isMessageOfRegPopupOpen, setIsMessageOfRegPopupOpen] = useState(false);
 
   // Add new image popup state.
-  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
+  const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
 
   // Edit avatar image popup state.
-  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+  const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
 
   // Popup image state.
-  const [isImageModalOpen, setImageModalOpen] = React.useState(false);
+  const [isImageModalOpen, setImageModalOpen] = useState(false);
 
   // The link and name of the popup image.
-  const [selectedCard, setSelectedCard] = React.useState({});
+  const [selectedCard, setSelectedCard] = useState({});
 
   // Delete image from the gallery popup state.
-  const [isDeleteImagePopupOpen, setIsDeleteImagePopupOpen] = React.useState(false);
+  const [isDeleteImagePopupOpen, setIsDeleteImagePopupOpen] = useState(false);
 
   // Login state
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
-  const [email, setEmail] = React.useState("");
+  // User email state
+  const [email, setEmail] = useState("");
 
-  const [password, setPassword] = React.useState("");
+  // User password state
+  const [password, setPassword] = useState("");
 
-  const handleChange = (e) => {
-    const { email, password } = e.target;
-    setPassword(password)
-    setEmail(email);
-  }
+
+
 
   const handleCardLike = (card) => {
     // Check one more time if this card was already liked
     const isLiked = card.likes.some(i => i._id === currentUser._id);
 
-    // Send a request to the API and getting the updated card data
+    // Send a request to the Api and getting the updated card data
     if (isLiked) {
-      api.unLikeCard(card._id, !isLiked).then((newCard) => {
+      Api.unLikeCard(card._id, !isLiked).then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-      }).catch((error) => console.log(error));
+      }).catch((error) => console.log(`Error: ${error}`));
     } else {
-      api.likeCard(card._id, !isLiked).then((newCard) => {
+      Api.likeCard(card._id, !isLiked).then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-      }).catch((error) => console.log(error));
+      }).catch((error) => console.log(`Error: ${error}`));
     }
   }
 
-  React.useEffect(() => {
-    api.getInitialCards()
-      .then(res => {
-        setCards(res)
-      }).catch((error) => console.log(error))
-  }, [])
-
   const getUserInfo = async () => {
+
     try {
-      const callData = await api.getUserInfo();
+      const callData = await Api.getUserInfo();
       callData && setCurrentUser(callData);
     } catch (error) {
       console.log(error);
     }
+
   }
-  React.useEffect(() => {
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt")
+    Api._headers.authorization = `Bearer ${jwt}`
     getUserInfo();
+    Api.getInitialCards()
+      .then(res => {
+       return setCards(res)
+      }).catch((error) => console.log(error))
   }, []);
+
 
 
   const handleDeleteCard = async () => {
     const id = selectedCard._id;
     try {
-      await api.deleteCard(id);
+      await Api.deleteCard(id);
       setCards(cards.filter((card) => card._id !== id))
       closeAllPopups();
     } catch (error) {
@@ -141,45 +143,56 @@ function App() {
 
   const handleUpdateUser = async (data) => {
     try {
-      return api
+      return Api
         .setUserInfo(data)
         .then((res) => {
           setCurrentUser(res)
           closeAllPopups();
         })
     } catch (error) {
-      console.log(error);
+      console.log(`Error: ${error}`);
     }
   };
 
   const handleUpdateAvatar = async (data) => {
     try {
-      return await api
+      return await Api
         .setUserImage(data.avatar).then(res => {
           setCurrentUser(res)
           closeAllPopups();
         })
     } catch (error) {
-      console.log(error);
+      console.log(`Error: ${error}`);
     }
   };
 
 
   const handleAddPlaceSubmit = async (card) => {
     try {
-      await api.createNewCard(card).then((res) => {
+      await Api.createNewCard(card).then((res) => {
         setCards((Cards) => {
           return [res].concat(Cards)
         })
         closeAllPopups();
       })
     } catch (error) {
-      console.log(error);
+      console.log(`Error: ${error}`);
     }
   };
 
   const handleLogin = () => {
-    setLoggedIn(!loggedIn);
+    console.log("try to log")
+    return Auth.authorize(email, password)
+      .then((data) => {
+        if (data) {
+          setLoggedIn(true); // we're updating the state inside App.js
+          navigate('/home');
+          setCurrentUser(currentUser)
+          console.log(currentUser)
+          console.log("User logged in")
+        }
+      })
+      .catch((err) => console.log(`Error: ${err}`));
   }
 
   const handleRegisterd = () => {
@@ -194,7 +207,7 @@ function App() {
     navigate('/signin');
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     verifyToken();
   }, [navigate]);
 
@@ -209,14 +222,14 @@ function App() {
           setLoggedIn(true);
           setEmail(res.data.email);
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((error) => {
+          console.log(`Error: ${error}`);
         });
     }
   }
 
   // Close popups by esc key.
-  React.useEffect(() => {
+  useEffect(() => {
     const closeByEscape = (e) => {
       if (e.key === 'Escape') {
         closeAllPopups();

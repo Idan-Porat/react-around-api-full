@@ -12,8 +12,8 @@ module.exports.getCards = (req, res) => {
       error.statusCode = ERR_CODE_404;
       throw error; // Remember to throw an error so .catch handles it instead of .then
     })
-    .then((card) => {
-      res.status(STAT_CODE_200).send({ data: card });
+    .then((cards) => {
+      res.status(STAT_CODE_200).send({ data: cards});
     })
     .catch((err) => {
       if (err.name === 'CastError') {

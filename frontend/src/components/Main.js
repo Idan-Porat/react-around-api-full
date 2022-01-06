@@ -27,7 +27,7 @@ function Main(props) {
       <section className="elements">
         <ul className="elements__container">
           {
-            cards.map(card => (
+            cards.map((card) => (
               <Card onCardDelete={onDeleteImagePopupOpen} onCardLike={onCardLike} card={card} key={card._id} cardClickHandler={cardClickHandler} onDeleteImagePopupOpen={onDeleteImagePopupOpen} />
             ))
           }

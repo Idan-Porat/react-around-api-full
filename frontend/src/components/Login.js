@@ -1,28 +1,18 @@
 import React from "react";
 import withRouter from "./withRouter";
-import { useNavigate } from "react-router-dom";
-import Auth from "../utils/auth";
 import AuthForm from "./AuthForm";
 
 function Login(props) {
 
     const { handleLogin, email, password, setPassword, setEmail } = props;
 
-    const navigate = useNavigate()
     const handleSubmit = (e) => {
         e.preventDefault();
         // you'll need to add your login code here
         if (!email || !password) {
             return;
         }
-        return Auth.authorize(email, password)
-            .then((data) => {
-                if (data.token) {
-                    handleLogin(); // we're updating the state inside App.js
-                    navigate('/home');
-                }
-            })
-            .catch((err) => console.log(err));
+        return handleLogin();
     }
     return (
 

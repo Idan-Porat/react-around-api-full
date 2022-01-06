@@ -1,5 +1,3 @@
-import react from "react";
-
 class Api {
 
     constructor({ baseURL, headers }) {
@@ -14,15 +12,17 @@ class Api {
         return res.json();
     }
 
-    getInitialCards = () => {
+    getInitialCards() {
         return fetch(`${this._baseURL}/cards`, {
+            method: 'GET',
             headers: this._headers
         })
             .then(res => this._getResponseData(res))
     }
 
-    getUserInfo = () => {
+    getUserInfo() {
         return fetch(`${this._baseURL}/users/me`, {
+            method: 'GET',
             headers: this._headers
         })
             .then(res => this._getResponseData(res))
@@ -85,12 +85,10 @@ class Api {
     }
 }
 
-export const api = new Api({
-    baseURL: "https://around.nomoreparties.co/v1/group-12",
-    headers: {
-        authorization: "001651b9-e63d-4f3d-8d65-ab968b3111ee",
-        "Content-Type": "application/json"
-    }
+export default new Api({
+    baseURL: "http://localhost:3000", 
+    headers: { 
+        authorization: `Bearer ${localStorage.getItem('jwt')}`, 
+        "Content-Type": "application/json" 
+    } 
 });
-
-export default Api;
