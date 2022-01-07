@@ -1,4 +1,6 @@
 const express = require('express');
+const cors = require('cors');
+const helmet = require("helmet");
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/users');
@@ -9,8 +11,34 @@ const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 const { PORT = 3000, BASE_PATH } = process.env;
 const app = express();
+app.use(helmet());
+app.use(cors({
+  origin: "https://around-porat.students.nomoreparties.sbs",
+}));
 
-app.post(bodyParser.urlencoded({ extended: false }));
+app.options("*",cors())
+
+app.use((req, res, next) => {
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://around-porat.students.nomoreparties.sbs"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Credentials",
+     true
+  );
+  next();
+})
+
+app.post(bodyParser.urlencoded({ extended: true }));
 app.post(bodyParser.json());
 
 mongoose.connect('mongodb://localhost:27017/aroundb');
