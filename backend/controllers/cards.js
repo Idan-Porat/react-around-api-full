@@ -12,8 +12,8 @@ module.exports.getCards = (req, res) => {
       error.statusCode = ERR_CODE_404;
       throw error; // Remember to throw an error so .catch handles it instead of .then
     })
-    .then((cards) => {
-      res.status(STAT_CODE_200).send({ data: cards});
+    .then((card) => {
+      res.status(STAT_CODE_200).send({ data: card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -26,7 +26,7 @@ module.exports.getCards = (req, res) => {
     });
 };
 
-module.exports.register = (req, res) => {
+module.exports.createCard = (req, res) => {
   const { _id } = req.user;
   const {
     name, imageLink,

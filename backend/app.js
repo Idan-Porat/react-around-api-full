@@ -6,7 +6,7 @@ const cardRouter = require('./routes/cards');
 const auth = require('./middleware/auth');
 const { register, login } = require('./controllers/users');
 const { errors } = require('celebrate');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { requestLogger, errorLogger } = require('./middleware/logger');
 const { PORT = 3000, BASE_PATH } = process.env;
 const app = express();
 
