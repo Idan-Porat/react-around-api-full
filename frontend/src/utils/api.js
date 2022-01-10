@@ -1,117 +1,105 @@
 class Api {
 
-    constructor({ baseURL, headers }) {
+    constructor({ baseURL }) {
         this._baseURL = baseURL;
-        this._headers = headers;
     }
 
-    _getResponseData(res) {
-        console.log(res);
-        console.log(res.data);
-        console.log({ res });
-        if (!res.ok) {
-            return Promise.reject(`Error: ${res.status}`);
+    customFetch = (url, options) => {
+        fetch(url, options).then((res) =>
+            res.ok ? res.json() : Promise.reject(res.statusText),
+        );
+    }
+
+        getInitialCards(token) {
+            return this.customFetch(`${this._baseURL}/cards`, {
+                method: 'GET',
+                headers: {
+                    "content-type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+            });
         }
-        return res.json();
-    }
 
-    getInitialCards(token) {
-        return fetch(`${this._baseURL}/cards`, {
-            method: 'GET',
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
-        })
-            .then(res => this._getResponseData(res))
-    }
-
-    getUserInfo(token) {
-        return fetch(`${this._baseURL}/users/me`, {
-            method: 'GET',
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
-        })
-            .then(res => this._getResponseData(res))
-    }
-
-    createNewCard = (data, token) => {
-        return fetch(`${this._baseURL}/cards`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
-            method: 'POST',
-            body: JSON.stringify(data)
-        })
-            .then(res => this._getResponseData(res))
-    }
-
-    deleteCard = (cardId, token) => {
-        return fetch(`${this._baseURL}/cards/${cardId}`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
-            method: 'DELETE'
-        })
-            .then(res => this._getResponseData(res))
-    }
-
-    setUserInfo = ({ name, about }, token) => {
-        return fetch(`${this._baseURL}/users/me`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
-            method: 'PATCH',
-            body: JSON.stringify({
-                name: name,
-                about: about
+        getUserInfo(token) {
+            return this.customFetch(`${this._baseURL}/users/me`, {
+                method: 'GET',
+                headers: {
+                    "content-type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
             })
-        })
-            .then(res => this._getResponseData(res))
-    }
+        }
 
-    setUserImage = (avatar, token) => {
-        return fetch(`${this._baseURL}/users/me/avatar`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
-            method: 'PATCH',
-            body: JSON.stringify({
-                avatar: avatar
+        createNewCard = (data, token) => {
+            return this.customFetch(`${this._baseURL}/cards`, {
+                headers: {
+                    "content-type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                method: 'POST',
+                body: JSON.stringify(data)
             })
-        })
-            .then(res => this._getResponseData(res))
-    }
+        }
 
-    likeCard = (cardId, token) => {
-        return fetch(`${this._baseURL}/cards/likes/${cardId}`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
-            method: 'PUT'
-        })
-            .then(res => this._getResponseData(res))
-    }
+        deleteCard = (cardId, token) => {
+            return this.customFetch(`${this._baseURL}/cards/${cardId}`, {
+                headers: {
+                    "content-type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                method: 'DELETE'
+            })
+                .then(res => this._getResponseData(res))
+        }
 
-    unLikeCard = (cardId, token) => {
-        return fetch(`${this._baseURL}/cards/likes/${cardId}`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
-            method: 'DELETE'
-        })
-            .then(res => this._getResponseData(res))
+        setUserInfo = ({ name, about }, token) => {
+            return this.customFetch(`${this._baseURL}/users/me`, {
+                headers: {
+                    "content-type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                method: 'PATCH',
+                body: JSON.stringify({
+                    name: name,
+                    about: about
+                })
+            })
+        }
+
+        setUserImage = (avatar, token) => {
+            return this.customFetch(`${this._baseURL}/users/me/avatar`, {
+                headers: {
+                    "content-type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                method: 'PATCH',
+                body: JSON.stringify({
+                    avatar: avatar
+                })
+            })
+        }
+
+        likeCard = (cardId, token) => {
+            return this.customFetch(`${this._baseURL}/cards/likes/${cardId}`, {
+                headers: {
+                    "content-type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                method: 'PUT'
+            })
+        }
+
+        unLikeCard = (cardId, token) => {
+            return this.customFetch(`${this._baseURL}/cards/likes/${cardId}`, {
+                headers: {
+                    "content-type": "application/json",
+                    authorization: `Bearer ${token}`,
+                },
+                method: 'DELETE'
+            })
+        }
     }
-}
 
 export default new Api({
-    baseURL: "https://api.around-porat.students.nomoreparties.sbs",
-});
+        baseURL: "https://api.around-porat.students.nomoreparties.sbs",
+    });
