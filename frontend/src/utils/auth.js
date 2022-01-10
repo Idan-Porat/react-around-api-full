@@ -68,9 +68,9 @@ class Auth {
 
 
 export default new Auth({ 
-  baseURL: "https://api.around-porat.students.nomoreparties.sbs", 
+  baseURL: "https://around-porat.students.nomoreparties.sbs", 
   headers: { 
-    "Accept": localStorage.getItem('token'), 
+    authorization: localStorage.getItem('token'), 
     'Content-Type': 'application/json', 
   }, 
 }); 

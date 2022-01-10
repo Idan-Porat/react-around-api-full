@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require("helmet");
 const mongoose = require('mongoose');
-require('dotenv').config();
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
@@ -31,7 +30,7 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
+    "X-Requested-With,content-type, Authorization",
   );
   res.setHeader(
     "Access-Control-Allow-Credentials",
