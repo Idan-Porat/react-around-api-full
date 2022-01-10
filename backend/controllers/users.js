@@ -18,7 +18,7 @@ module.exports.getAllUsers = (req, res) => {
       throw error;
     })
     .then((user) => {
-      res.status(STAT_CODE_200).send({ user });
+      res.status(STAT_CODE_200).send( user );
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -78,7 +78,7 @@ module.exports.updateProfile = (req, res) => {
     error.statusCode = ERR_CODE_404;
     throw error;
   })
-    .then((user) => res.status(STAT_CODE_200).send({ user }))
+    .then((user) => res.status(STAT_CODE_200).send( user ))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(ERR_CODE_400).send(err);
@@ -102,7 +102,7 @@ module.exports.updateAvatar = (req, res) => {
     error.statusCode = ERR_CODE_404;
     throw error;
   })
-    .then((user) => res.status(STAT_CODE_200).send({ user }))
+    .then((user) => res.status(STAT_CODE_200).send( user ))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(ERR_CODE_400).send(err);
