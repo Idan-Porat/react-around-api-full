@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require("helmet");
 const mongoose = require('mongoose');
+require('dotenv').config();
 const bodyParser = require('body-parser');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
@@ -10,6 +11,7 @@ const { register, login } = require('./controllers/users');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 const { PORT = 3000, BASE_PATH } = process.env;
+console.log(process.env.NODE_ENV);
 const app = express();
 app.use(helmet());
 app.use(cors({
