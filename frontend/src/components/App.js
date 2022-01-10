@@ -23,6 +23,8 @@ function App() {
 
   const navigate = useNavigate();
 
+  const [token, setToken] = useState(localStorage.getItem("jwt"));
+
   const [cards, setCards] = useState([]);
 
   const [currentUser, setCurrentUser] = useState({});
@@ -62,7 +64,7 @@ function App() {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
 
     // Send a request to the Api and getting the updated card data
-    if (isLiked) {
+    if (isLiked, token) {
       Api.unLikeCard(card._id, !isLiked).then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
       }).catch((error) => console.log(`Error: ${error}`));
@@ -80,26 +82,45 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-
   }
 
+  // Check if logged in and f user has a token in local storage, check if it is valid.
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt")
-    console.log(jwt);
-    Api._headers.authorization = `Bearer ${jwt}`
-    getUserInfo();
-    Api.getInitialCards()
-      .then(res => {
-        setCards(res)
-      }).catch((error) => console.log(error))
-  }, []);
+    if (token) {
+      Auth
+        .checkToken(token)
+        .then((res) => {
+          setLoggedIn(true);
+          setEmail({ email: res.data.email });
+          navigate('/')
+        })
+        .catch((error) => {
+          console.log(`Error: ${error}`);
+        });
+    }
+  }, [token, navigate]);
 
-
+  useEffect(() => {
+    if (token) {
+      Api
+        .getUserInfo(token)
+        .then((res) => {
+          setCurrentUser(res.data);
+          Api
+            .getInitialCards(token)
+            .then((cards) => {
+              setCards(cards);
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [token]);
 
   const handleDeleteCard = async () => {
     const id = selectedCard._id;
     try {
-      await Api.deleteCard(id);
+      await Api.deleteCard(id, token);
       setCards(cards.filter((card) => card._id !== id))
       closeAllPopups();
     } catch (error) {
@@ -141,7 +162,7 @@ function App() {
   const handleUpdateUser = async (data) => {
     try {
       return Api
-        .setUserInfo(data)
+        .setUserInfo(data, token)
         .then((res) => {
           setCurrentUser(res)
           closeAllPopups();
@@ -154,7 +175,7 @@ function App() {
   const handleUpdateAvatar = async (data) => {
     try {
       return await Api
-        .setUserImage(data.avatar).then(res => {
+        .setUserImage(data.avatar, token).then(res => {
           setCurrentUser(res)
           closeAllPopups();
         })
@@ -166,7 +187,7 @@ function App() {
 
   const handleAddPlaceSubmit = async (card) => {
     try {
-      await Api.createNewCard(card).then((res) => {
+      await Api.createNewCard(card, token).then((res) => {
         setCards((Cards) => {
           return [res].concat(Cards)
         })
@@ -204,27 +225,8 @@ function App() {
     navigate('/signin');
   }
 
-  useEffect(() => {
-    verifyToken();
-  }, [navigate]);
+  
 
-
-  function verifyToken() {
-    const jwt = localStorage.getItem("jwt");
-    console.log(jwt)
-    if (localStorage.getItem("jwt")) {
-      Auth
-        .checkToken(jwt)
-        .then((res) => {
-          setLoggedIn(true);
-          setEmail({ email: res.data.email });
-          navigate('/')
-        })
-        .catch((error) => {
-          console.log(`Error: ${error}`);
-        });
-    }
-  }
 
   // Close popups by esc key.
   useEffect(() => {

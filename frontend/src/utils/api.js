@@ -8,49 +8,64 @@ class Api {
     _getResponseData(res) {
         console.log(res);
         console.log(res.data);
-        console.log({res});
+        console.log({ res });
         if (!res.ok) {
             return Promise.reject(`Error: ${res.status}`);
         }
         return res.json();
     }
 
-    getInitialCards() {
+    getInitialCards(token) {
         return fetch(`${this._baseURL}/cards`, {
             method: 'GET',
-            headers: this._headers
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
         })
             .then(res => this._getResponseData(res))
     }
 
-    getUserInfo() {
+    getUserInfo(token) {
         return fetch(`${this._baseURL}/users/me`, {
             method: 'GET',
-            headers: this._headers
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
         })
             .then(res => this._getResponseData(res))
     }
 
-    createNewCard = (data) => {
+    createNewCard = (data, token) => {
         return fetch(`${this._baseURL}/cards`, {
-            headers: this._headers,
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
             method: 'POST',
             body: JSON.stringify(data)
         })
             .then(res => this._getResponseData(res))
     }
 
-    deleteCard = (cardId) => {
+    deleteCard = (cardId, token) => {
         return fetch(`${this._baseURL}/cards/${cardId}`, {
-            headers: this._headers,
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
             method: 'DELETE'
         })
             .then(res => this._getResponseData(res))
     }
 
-    setUserInfo = ({ name, about }) => {
+    setUserInfo = ({ name, about }, token) => {
         return fetch(`${this._baseURL}/users/me`, {
-            headers: this._headers,
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
             method: 'PATCH',
             body: JSON.stringify({
                 name: name,
@@ -60,9 +75,12 @@ class Api {
             .then(res => this._getResponseData(res))
     }
 
-    setUserImage = (avatar) => {
+    setUserImage = (avatar, token) => {
         return fetch(`${this._baseURL}/users/me/avatar`, {
-            headers: this._headers,
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
             method: 'PATCH',
             body: JSON.stringify({
                 avatar: avatar
@@ -71,17 +89,23 @@ class Api {
             .then(res => this._getResponseData(res))
     }
 
-    likeCard = (cardId) => {
+    likeCard = (cardId, token) => {
         return fetch(`${this._baseURL}/cards/likes/${cardId}`, {
-            headers: this._headers,
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
             method: 'PUT'
         })
             .then(res => this._getResponseData(res))
     }
 
-    unLikeCard = (cardId) => {
+    unLikeCard = (cardId, token) => {
         return fetch(`${this._baseURL}/cards/likes/${cardId}`, {
-            headers: this._headers,
+            headers: {
+                "content-type": "application/json",
+                authorization: `Bearer ${token}`,
+            },
             method: 'DELETE'
         })
             .then(res => this._getResponseData(res))
@@ -89,9 +113,5 @@ class Api {
 }
 
 export default new Api({
-    baseURL: "https://api.around-porat.students.nomoreparties.sbs", 
-    headers: { 
-        authorization: `Bearer ${localStorage.getItem('jwt')}`, 
-        "Content-Type": "application/json" 
-    } 
+    baseURL: "https://api.around-porat.students.nomoreparties.sbs",
 });

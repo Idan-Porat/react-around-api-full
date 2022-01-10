@@ -31,7 +31,6 @@ class Auth {
   };
 
   authorize = (email, password) => {
-    console.log(email)
     return fetch(`${this._baseURL}/signin`, {
       method: 'POST',
       headers: this._header,
@@ -39,8 +38,8 @@ class Auth {
     })
       .then((res) => this._getResponseData(res))
       .then((data) => {
-        if (data) {
-          localStorage.setItem("jwt", data);
+        if (data.token) {
+          localStorage.setItem("jwt", data.token);
           return data;
         } else {
           throw new Error('the user email not found')
@@ -57,10 +56,7 @@ class Auth {
         authorization: `Bearer ${token}`
       }
     })
-      .then((res) => this._getResponseData(res))
-      .then((res) => {
-        return res;
-      })
+      .then((res) => this._getResponseData(res));
   }
 }
 
@@ -69,7 +65,7 @@ class Auth {
 export default new Auth({
   baseURL: "https://api.around-porat.students.nomoreparties.sbs",
   headers: {
-    authorization: `Bearer ${localStorage.getItem('jwt')}`,
-    "Content-Type": "application/json"
+    Accept: "application/json",
+    "Content-Type": "application/json",
   }
 });
