@@ -9,9 +9,9 @@ function Register(props) {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const navigate = useNavigate();
-    
+
     const handleChange = (e) => {
-        const { email,  password } = e.target;
+        const { email, password } = e.target;
         setPassword(password)
         setEmail(email);
     }
@@ -28,15 +28,14 @@ function Register(props) {
                     console.log('Somthing went wrong');
                 }
             })
-            .catch((err) => 
-            {
+            .catch((err) => {
                 handleRegisterd()
                 console.log(err)
             })
     }
 
     return (
-        
+
         <AuthForm
             title='Sign up'
             changeRouteName="Already a member? Log in here!"

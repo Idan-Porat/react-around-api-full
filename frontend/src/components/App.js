@@ -181,6 +181,7 @@ function App() {
     console.log("try to log")
     return Auth.authorize(email, password)
       .then((data) => {
+        console.log(data);
         if (data) {
           setLoggedIn(true); // we're updating the state inside App.js
           navigate('/home');
