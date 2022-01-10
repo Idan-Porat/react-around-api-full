@@ -68,9 +68,9 @@ class Auth {
 
 
 export default new Auth({
-  baseURL: "http://localhost:3000",
+  baseURL: "https://register.nomoreparties.co",
   headers: {
-    authorization: `Bearer ${localStorage.getItem('jwt')}`,
-    "Content-Type": "application/json"
-  }
+    "Accept": localStorage.getItem('token'),
+    'Content-Type': 'application/json',
+  },
 });
