@@ -214,6 +214,7 @@ function App() {
 
   function verifyToken() {
     const jwt = localStorage.getItem("jwt");
+    console.log(jwt)
     if (localStorage.getItem("jwt")) {
       Auth
         .checkToken(jwt)
@@ -242,7 +243,7 @@ function App() {
   }, [])
 
   const path = useLocation();
-  const findPath = path.pathname === '/' ? "Log out" : path.pathname === '/signin' ? "Sign up" : "Log in";
+  const findPath = path.pathname === '/home' ? "Log out" : path.pathname === '/signin' ? "Sign up" : "Log in";
 
   const titleOfThePopup = path.pathname === '/signin' ? 'Success! You have now been registered.' : 'Oops, something went wrong! Please try again.';
   const popupMessageImage = path.pathname === '/signin' ? successToLog : failToLog;
