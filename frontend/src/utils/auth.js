@@ -67,10 +67,10 @@ class Auth {
 
 
 
-export default new Auth({ 
-  baseURL: "https://around-porat.students.nomoreparties.sbs", 
-  headers: { 
-    "Accept": localStorage.getItem('token'), 
-    'Content-Type': 'application/json', 
-  }, 
-}); 
+export default new Auth({
+  baseURL: "https://api.around-porat.students.nomoreparties.sbs",
+  headers: {
+    authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    "Content-Type": "application/json"
+  }
+});
