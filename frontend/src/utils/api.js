@@ -18,7 +18,6 @@ class Api {
             headers: this._headers
         })
             .then(res => this._getResponseData(res))
-            .then(res =>  {return res.data})
     }
 
     getUserInfo() {
@@ -27,7 +26,6 @@ class Api {
             headers: this._headers
         })
             .then(res => this._getResponseData(res))
-            .then(res =>  {return res.data})
     }
 
     createNewCard = (data) => {

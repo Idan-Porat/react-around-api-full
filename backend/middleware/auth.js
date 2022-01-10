@@ -4,6 +4,7 @@ const { createSecretKey } = require('crypto');
 
 const { JWT_SECRET } = process.env;
 
+dotenv.config();
 const handleAuthError = (res) => {
   res
     .status(403)
