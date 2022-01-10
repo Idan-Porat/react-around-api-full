@@ -6,6 +6,7 @@ class Auth {
   }
 
   _getResponseData(res) {
+    console.log(res)
     if (!res.ok) {
       return Promise.reject(`Error: ${res.status}`);
     }
@@ -33,9 +34,7 @@ class Auth {
     console.log(email)
     return fetch(`${this._baseURL}/signin`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: this._header,
       body: JSON.stringify({ password, email })
     })
       .then((res) => this._getResponseData(res))

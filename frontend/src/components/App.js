@@ -90,7 +90,7 @@ function App() {
     getUserInfo();
     Api.getInitialCards()
       .then(res => {
-        return setCards(res)
+        setCards(res)
       }).catch((error) => console.log(error))
   }, []);
 
