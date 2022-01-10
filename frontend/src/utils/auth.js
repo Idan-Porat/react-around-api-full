@@ -68,9 +68,9 @@ class Auth {
 
 
 export default new Auth({
-  baseURL: "https://register.nomoreparties.co",
+  baseURL: "http://api.around-porat.students.nomoreparties.sbs",
   headers: {
-    "Accept": localStorage.getItem('token'),
-    'Content-Type': 'application/json',
-  },
+    authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    "Content-Type": "application/json"
+  }
 });
