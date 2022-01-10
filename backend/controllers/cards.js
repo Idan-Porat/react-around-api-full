@@ -13,7 +13,7 @@ module.exports.getCards = (req, res) => {
       throw error; // Remember to throw an error so .catch handles it instead of .then
     })
     .then((card) => {
-      res.status(STAT_CODE_200).send({ data: card });
+      res.status(STAT_CODE_200).send({ card });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -41,7 +41,7 @@ module.exports.createCard = (req, res) => {
       error.statusCode = ERR_CODE_400;
       throw error; // Remember to throw an error so .catch handles it instead of .then
     })
-    .then((card) => res.status(STAT_CODE_200).send({ data: card }))
+    .then((card) => res.status(STAT_CODE_200).send({ card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(ERR_CODE_400).send(err);
@@ -61,7 +61,7 @@ module.exports.deleteCard = (req, res) => {
       error.statusCode = ERR_CODE_404;
       throw error; // Remember to throw an error so .catch handles it instead of .then
     })
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.send({ card }))
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(ERR_CODE_400).send(err);
@@ -85,7 +85,7 @@ module.exports.likeCard = (req, res) => {
     error.statusCode = ERR_CODE_404;
     throw error; // Remember to throw an error so .catch handles it instead of .then
   })
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.send({ card }))
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(ERR_CODE_400).send(err);
@@ -109,7 +109,7 @@ module.exports.dislikeCard = (req, res) => {
     error.statusCode = ERR_CODE_404;
     throw error; // Remember to throw an error so .catch handles it instead of .then
   })
-    .then((card) => res.send({ data: card }))
+    .then((card) => res.send({ card }))
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(ERR_CODE_400).send(err);

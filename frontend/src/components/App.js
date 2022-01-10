@@ -64,24 +64,13 @@ function App() {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
 
     // Send a request to the Api and getting the updated card data
-    if (isLiked, token) {
-      Api.unLikeCard(card._id, !isLiked).then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-      }).catch((error) => console.log(`Error: ${error}`));
-    } else {
-      Api.likeCard(card._id, !isLiked).then((newCard) => {
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
-      }).catch((error) => console.log(`Error: ${error}`));
-    }
-  }
-
-  const getUserInfo = async () => {
-    try {
-      const callData = await Api.getUserInfo();
-      callData && setCurrentUser(callData);
-    } catch (error) {
-      console.log(error);
-    }
+    Api
+      .changeLikeCardStatus(card._id, !isLiked, token)
+      .then((newCard) => {
+        const { data } = newCard;
+        setCards((state) => state.map((c) => (c._id === card._id ? data : c)));
+      })
+      .catch((err) => console.log(err));
   }
 
   // Check if logged in and f user has a token in local storage, check if it is valid.
@@ -101,6 +90,7 @@ function App() {
   }, [token, navigate]);
 
   useEffect(() => {
+    console.log(token)
     if (token) {
       Api
         .getUserInfo(token)
@@ -115,7 +105,7 @@ function App() {
         })
         .catch((err) => console.log(err));
     }
-  }, [token]);
+  }, [token, navigate]);
 
   const handleDeleteCard = async () => {
     const id = selectedCard._id;
@@ -226,7 +216,7 @@ function App() {
     navigate('/signin');
   }
 
-  
+
 
 
   // Close popups by esc key.

@@ -23,11 +23,7 @@ class Auth {
         email,
       }),
     })
-      .then((res) => this._getResponseData(res))
-      .then((res) => {
-        console.log(res)
-        return res;
-      })
+      .then((res) => this._getResponseData(res));
   };
 
   authorize = (email, password) => {
@@ -41,10 +37,8 @@ class Auth {
         if (data.token) {
           localStorage.setItem("jwt", data.token);
           return data;
-        } else {
-          throw new Error('the user email not found')
         }
-      })
+      });
   };
 
   checkToken = (token) => {
@@ -52,6 +46,7 @@ class Auth {
     return fetch(`${this._baseURL}/users/me`, {
       method: 'GET',
       headers: {
+        Accept: "application/json",
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       }
