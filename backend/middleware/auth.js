@@ -2,16 +2,15 @@ const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const { createSecretKey } = require('crypto');
 
-const { NODE_ENV, JWT_SECRET } = process.env;
+const { JWT_SECRET } = process.env;
 
 const handleAuthError = (res) => {
   res
-    .status(401)
+    .status(403)
     .send({ message: 'Authorization Error' });
 };
 
 const extractBearerToken = (header) => {
-  console.log(header)
   return header.replace('Bearer ', '');
 };
 
@@ -28,7 +27,7 @@ module.exports = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, NODE_ENV === 'prodaction' ? JWT_SECRET : 'dev-secret');
+    payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
     return handleAuthError(res);
   }

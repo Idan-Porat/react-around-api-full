@@ -57,9 +57,6 @@ function App() {
   // User password state
   const [password, setPassword] = useState("");
 
-
-
-
   const handleCardLike = (card) => {
     // Check one more time if this card was already liked
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -77,7 +74,6 @@ function App() {
   }
 
   const getUserInfo = async () => {
-
     try {
       const callData = await Api.getUserInfo();
       callData && setCurrentUser(callData);
@@ -89,6 +85,7 @@ function App() {
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt")
+    console.log(jwt);
     Api._headers.authorization = `Bearer ${jwt}`
     getUserInfo();
     Api.getInitialCards()

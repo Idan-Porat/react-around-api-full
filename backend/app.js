@@ -39,7 +39,7 @@ app.use((req, res, next) => {
   next();
 })
 
-app.post(bodyParser.urlencoded({ extended: true }));
+app.post(bodyParser.urlencoded({ extended: false }));
 app.post(bodyParser.json());
 
 mongoose.connect('mongodb://localhost:27017/aroundb');

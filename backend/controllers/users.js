@@ -8,6 +8,7 @@ const ERR_CODE_400 = 400;
 const ERR_CODE_401 = 401;
 const ERR_CODE_404 = 404;
 const ERR_CODE_500 = 500;
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getAllUsers = (req, res) => {
   User.find({})
@@ -42,7 +43,7 @@ module.exports.getUser = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.register = (req, res, next) => {
+module.exports.register = ('/signin', (req, res, next) => {
   const { email, password } = req.body;
   bcrypt
     .hash(password, 10)
@@ -63,7 +64,7 @@ module.exports.register = (req, res, next) => {
       res.send(user);
     })
     .catch(next);
-};
+});
 
 module.exports.updateProfile = (req, res) => {
   const { name, about } = req.body;
@@ -113,13 +114,13 @@ module.exports.updateAvatar = (req, res) => {
     });
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = ('/signin', (req, res) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
       // we're creating a token
-      const token = jwt.sign({ _id: user._id }, 'super-strong-secret', { expiresIn: '7d' });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'prodaction' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
 
       // we return the token
       res.send({ token });
@@ -129,4 +130,4 @@ module.exports.login = (req, res) => {
         .status(ERR_CODE_401)
         .send({ message: err.message });
     });
-};
+});
