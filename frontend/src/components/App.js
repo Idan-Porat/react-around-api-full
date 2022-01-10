@@ -90,7 +90,7 @@ function App() {
     getUserInfo();
     Api.getInitialCards()
       .then(res => {
-       return setCards(res)
+        return setCards(res)
       }).catch((error) => console.log(error))
   }, []);
 
@@ -179,9 +179,8 @@ function App() {
 
   const handleLogin = () => {
     console.log("try to log")
-    return Auth.authorize(email, password)
+    Auth.authorize(email, password)
       .then((data) => {
-        console.log(data);
         if (data) {
           setLoggedIn(true); // we're updating the state inside App.js
           navigate('/home');
