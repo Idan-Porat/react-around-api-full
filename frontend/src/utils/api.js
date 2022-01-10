@@ -6,6 +6,9 @@ class Api {
     }
 
     _getResponseData(res) {
+        console.log(res);
+        console.log(res.data);
+        console.log({res});
         if (!res.ok) {
             return Promise.reject(`Error: ${res.status}`);
         }
