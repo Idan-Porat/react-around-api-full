@@ -204,6 +204,7 @@ function App() {
       .then((data) => {
         if (data) {
           setLoggedIn(true); // we're updating the state inside App.js
+          setToken(data.token);
           navigate('/home');
           setCurrentUser(currentUser)
           console.log(currentUser)
