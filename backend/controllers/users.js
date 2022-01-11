@@ -43,7 +43,7 @@ module.exports.getUser = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.register = (req, res, next) => {
+module.exports.createUser = (req, res, next) => {
   const { email, password } = req.body;
   bcrypt
     .hash(password, 10)

@@ -6,16 +6,14 @@ const bodyParser = require('body-parser');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const auth = require('./middleware/auth');
-const { register, login } = require('./controllers/users');
+const { createUser, login } = require('./controllers/users');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 const { PORT = 3000, BASE_PATH } = process.env;
 console.log(process.env.NODE_ENV);
 const app = express();
 app.use(helmet());
-app.use(cors({
-  origin: "https://around-porat.students.nomoreparties.sbs",
-}));
+app.use(cors());
 
 app.options("*",cors())
 app.post(bodyParser.json());
@@ -44,7 +42,7 @@ app.use((req, res, next) => {
 mongoose.connect('mongodb://localhost:27017/aroundb');
 app.use(requestLogger);
 
-app.post('/signup', register);
+app.post('/signup', createUser);
 app.post('/signin', login);
 
 app.use('/', auth, userRouter);
