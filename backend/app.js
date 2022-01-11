@@ -14,7 +14,6 @@ console.log(process.env.NODE_ENV);
 const app = express();
 app.use(helmet());
 app.use(cors());
-
 app.options("*",cors())
 app.post(bodyParser.json());
 app.post(bodyParser.urlencoded({ extended: false }));
@@ -30,7 +29,7 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type, Accept",
+    "X-Requested-With,content-type, Accept, authorization, Authorization",
   );
   res.setHeader(
     "Access-Control-Allow-Credentials",

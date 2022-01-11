@@ -260,7 +260,7 @@ function App() {
             />}>
             </Route>
             <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-              <Route path='/' element={<Main
+              <Route path='/home' element={<Main
                 onEditProfileClick={handleEditProfileClick}
                 onAddPlaceClick={handleAddPlaceClick}
                 onEditAvatarClick={handleEditAvatarClick}
