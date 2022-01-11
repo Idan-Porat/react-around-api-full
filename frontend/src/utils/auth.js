@@ -13,11 +13,13 @@ class Auth {
     return res.json();
   }
 
-  register = ({ email, password }) => {
+  register = (email, password) => {
     console.log({ email, password })
     return fetch(`${this._baseURL}/signup`, {
       method: "POST",
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         password,
         email,
@@ -33,7 +35,9 @@ class Auth {
   authorize = (email, password) => {
     return fetch(`${this._baseURL}/signin`, {
       method: 'POST',
-      headers: this._headers,
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ password, email })
     })
       .then((res) => this._getResponseData(res))
@@ -65,8 +69,4 @@ class Auth {
 
 export default new Auth({
   baseURL: "https://api.around-porat.students.nomoreparties.sbs",
-  headers: {
-    Accept: localStorage.getItem('jwt'),
-    "Content-Type": "application/json",
-  }
 });
