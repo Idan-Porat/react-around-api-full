@@ -29,7 +29,7 @@ class Auth {
   authorize = (email, password) => {
     return fetch(`${this._baseURL}/signin`, {
       method: 'POST',
-      headers: this._header,
+      headers: this._headers,
       body: JSON.stringify({ password, email })
     })
       .then((res) => this._getResponseData(res))
@@ -48,7 +48,7 @@ class Auth {
       headers: {
         Accept: "application/json",
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        authorization: `Bearer ${token}`,
       }
     })
       .then((res) => this._getResponseData(res));
