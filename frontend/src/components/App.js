@@ -180,8 +180,7 @@ function App() {
         if (data) {
           setLoggedIn(true); // we're updating the state inside App.js
           setToken(data.token);
-          navigate('/home');
-          setCurrentUser(currentUser)
+          navigate('/');
           console.log(currentUser)
           console.log("User logged in")
         }
@@ -204,7 +203,7 @@ function App() {
   // Check if logged in and f user has a token in local storage, check if it is valid.
   useEffect(() => {
     if (token) {
-      Auth
+      return Auth
         .checkToken(token)
         .then((res) => {
           setLoggedIn(true);
