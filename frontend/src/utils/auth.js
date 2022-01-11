@@ -66,7 +66,7 @@ class Auth {
 export default new Auth({
   baseURL: "https://api.around-porat.students.nomoreparties.sbs",
   headers: {
-    Accept: "application/json",
+    Accept: localStorage.getItem('jwt'),
     "Content-Type": "application/json",
   }
 });
