@@ -48,16 +48,15 @@ module.exports.createUser = (req, res, next) => {
   bcrypt
     .hash(password, 10)
     .then((hash) => {
-      User.create({ email: req.body.email, password: hash });
+      return User.create({ email: req.body.email, password: hash });
     })
-    .then((data) => { return  res.send({
+    .then((data) => res.send({
       email: data.email,
       name: data.name,
       about: data.about,
       avatar: data.avatar,
       _id: data._id,
-    })
-  })
+    }))
     .then((user) => {
       if (!user) {
         throw new errorhandler('Unsuccessful Request', 400);
