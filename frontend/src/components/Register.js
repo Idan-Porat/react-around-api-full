@@ -19,7 +19,7 @@ function Register(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("work")
-        Auth.register({ email, password })
+        Auth.register(email, password)
             .then((res) => {
                 if (res) {
                     navigate('/signin')
