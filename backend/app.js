@@ -15,8 +15,8 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.options("*",cors())
-app.post(bodyParser.json());
-app.post(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   res.setHeader(
