@@ -23,7 +23,11 @@ class Auth {
         email,
       }),
     })
-      .then((res) => this._getResponseData(res));
+      .then((res) => this._getResponseData(res))
+      .then((res) => {
+        console.log(res)
+        return res;
+      })
   };
 
   authorize = (email, password) => {
@@ -46,12 +50,14 @@ class Auth {
     return fetch(`${this._baseURL}/users/me`, {
       method: 'GET',
       headers: {
-        Accept: "application/json",
         'Content-Type': 'application/json',
-        authorization: `Bearer ${token}`,
+        authorization: `Bearer ${token}`
       }
     })
-      .then((res) => this._getResponseData(res));
+      .then((res) => this._getResponseData(res))
+      .then((res) => {
+        return res;
+      })
   }
 }
 

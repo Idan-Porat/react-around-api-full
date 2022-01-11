@@ -73,22 +73,6 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  // Check if logged in and f user has a token in local storage, check if it is valid.
-  useEffect(() => {
-    if (token) {
-      Auth
-        .checkToken(token)
-        .then((res) => {
-          setLoggedIn(true);
-          setEmail({ email: res.data.email });
-          navigate('/')
-        })
-        .catch((error) => {
-          console.log(`Error: ${error}`);
-        });
-    }
-  }, [token]);
-
   useEffect(() => {
     console.log(token)
     if (token) {
@@ -191,12 +175,12 @@ function App() {
 
   const handleLogin = () => {
     console.log("try to log")
-    Auth.authorize(email, password)
+    return Auth.authorize(email, password)
       .then((data) => {
         if (data) {
           setLoggedIn(true); // we're updating the state inside App.js
           setToken(data.token);
-          navigate('/');
+          navigate('/home');
           setCurrentUser(currentUser)
           console.log(currentUser)
           console.log("User logged in")
@@ -214,9 +198,24 @@ function App() {
     localStorage.removeItem("jwt");
     setPassword('')
     setEmail('')
-    navigate('/');
+    navigate('/signin');
   }
 
+  // Check if logged in and f user has a token in local storage, check if it is valid.
+  useEffect(() => {
+    if (token) {
+      Auth
+        .checkToken(token)
+        .then((res) => {
+          setLoggedIn(true);
+          setEmail({ email: res.data.email });
+          navigate('/')
+        })
+        .catch((error) => {
+          console.log(`Error: ${error}`);
+        });
+    }
+  }, [navigate]);
 
 
 
@@ -234,7 +233,7 @@ function App() {
   }, [])
 
   const path = useLocation();
-  const findPath = path.pathname === '/home' ? "Log out" : path.pathname === '/signin' ? "Sign up" : "Log in";
+  const findPath = path.pathname === '/' ? "Log out" : path.pathname === '/signin' ? "Sign up" : "Log in";
 
   const titleOfThePopup = path.pathname === '/signin' ? 'Success! You have now been registered.' : 'Oops, something went wrong! Please try again.';
   const popupMessageImage = path.pathname === '/signin' ? successToLog : failToLog;
