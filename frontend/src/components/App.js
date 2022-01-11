@@ -87,7 +87,7 @@ function App() {
           console.log(`Error: ${error}`);
         });
     }
-  }, [token, navigate]);
+  }, [loggedIn]);
 
   useEffect(() => {
     console.log(token)
@@ -99,13 +99,13 @@ function App() {
           Api
             .getInitialCards(token)
             .then((cards) => {
-              setCards(cards);
+              setCards(cards.data);
             })
             .catch((err) => console.log(err));
         })
         .catch((err) => console.log(err));
     }
-  }, [token, navigate]);
+  }, [token]);
 
   const handleDeleteCard = async () => {
     const id = selectedCard._id;
@@ -195,7 +195,7 @@ function App() {
         if (data) {
           setLoggedIn(true); // we're updating the state inside App.js
           setToken(data.token);
-          navigate('/home');
+          navigate('/');
           setCurrentUser(currentUser)
           console.log(currentUser)
           console.log("User logged in")
@@ -210,10 +210,10 @@ function App() {
 
   const handleLogOut = () => {
     setLoggedIn(false)
-    localStorage.clear();
+    localStorage.removeItem("jwt");
     setPassword('')
     setEmail('')
-    navigate('/signin');
+    navigate('/');
   }
 
 
@@ -260,7 +260,7 @@ function App() {
             />}>
             </Route>
             <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-              <Route path='/home' element={<Main
+              <Route path='/' element={<Main
                 onEditProfileClick={handleEditProfileClick}
                 onAddPlaceClick={handleAddPlaceClick}
                 onEditAvatarClick={handleEditAvatarClick}
