@@ -43,12 +43,12 @@ module.exports.getUser = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.register = ('/signup',(req, res, next) => {
+module.exports.register = (req, res, next) => {
   const { email, password } = req.body;
   bcrypt
     .hash(password, 10)
-    .then((password) => {
-      User.create({ email, password });
+    .then((hash) => {
+      User.create({ email: req.body.email, password: hash });
     })
     .then((data) => res.send({
       email: data.email,
@@ -64,7 +64,7 @@ module.exports.register = ('/signup',(req, res, next) => {
       res.send({ user });
     })
     .catch(next);
-});
+};
 
 module.exports.updateProfile = (req, res) => {
   const { name, about } = req.body;
@@ -114,7 +114,7 @@ module.exports.updateAvatar = (req, res) => {
     });
 };
 
-module.exports.login = ('/signin',(req, res) => {
+module.exports.login = (req, res) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
@@ -130,4 +130,4 @@ module.exports.login = ('/signin',(req, res) => {
         .status(ERR_CODE_401)
         .send({ message: err.message });
     });
-});
+};

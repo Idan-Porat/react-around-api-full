@@ -18,6 +18,8 @@ app.use(cors({
 }));
 
 app.options("*",cors())
+app.post(bodyParser.json());
+app.post(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   res.setHeader(
@@ -30,7 +32,7 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type",
+    "X-Requested-With,content-type, Accept",
   );
   res.setHeader(
     "Access-Control-Allow-Credentials",
@@ -38,9 +40,6 @@ app.use((req, res, next) => {
   );
   next();
 })
-
-app.post(bodyParser.urlencoded({ extended: false }));
-app.post(bodyParser.json());
 
 mongoose.connect('mongodb://localhost:27017/aroundb');
 app.use(requestLogger);
