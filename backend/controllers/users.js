@@ -62,7 +62,7 @@ module.exports.createUser = (req, res, next) => {
       if (!user) {
         throw new errorhandler('Unsuccessful Request', 400);
       }
-      res.send({ user });
+      return res.send({ user });
     })
     .catch(next);
 };
