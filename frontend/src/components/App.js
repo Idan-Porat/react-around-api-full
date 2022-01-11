@@ -81,13 +81,12 @@ function App() {
         .getUserInfo()
         .then((res) => {
           setCurrentUser(res);
-          setEmail(res.email);
         })
         .catch((err) => console.log(err));
       Api
         .getInitialCards()
         .then((cards) => {
-          setCards(cards.data);
+          return setCards(cards.data);
         })
         .catch((err) => console.log(err));
   }, [loggedIn]);
@@ -180,7 +179,7 @@ function App() {
         if (data) {
           setLoggedIn(true); // we're updating the state inside App.js
           setToken(data.token);
-          navigate('/home');
+          navigate('/');
           console.log(currentUser)
           console.log("User logged in")
         }

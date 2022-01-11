@@ -82,6 +82,6 @@ export default new Api({
     baseURL: "https://api.around-porat.students.nomoreparties.sbs",
     headers: {
         "content-type": "application/json",
-        authorization: `Bearer ${localStorage.getItem('jwt')}`,
+        authorization: ``,
     },
 });

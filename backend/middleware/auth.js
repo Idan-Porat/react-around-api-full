@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 
-const { JWT_SECRET } = process.env;
+const { NODE_ENV, JWT_SECRET } = process.env;
 
 dotenv.config();
 const handleAuthError = (res) => {
@@ -19,7 +19,7 @@ module.exports = (req, res, next) => {
   console.log(authorization);
 
   if (!authorization || !authorization.startsWith('Bearer ')) {
-    return handleAuthError(res);
+    handleAuthError(res);
   }
 
   const token = extractBearerToken(authorization);
@@ -27,12 +27,12 @@ module.exports = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, JWT_SECRET);
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
   } catch (err) {
-    return handleAuthError(res);
+    handleAuthError(res);
   }
 
   req.user = payload; // adding the payload to the Request object
 
-  return next(); // passing the request further along
+  next(); // passing the request further along
 };
