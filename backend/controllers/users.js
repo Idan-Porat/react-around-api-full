@@ -50,13 +50,14 @@ module.exports.createUser = (req, res, next) => {
     .then((hash) => {
       return User.create({ email: req.body.email, password: hash });
     })
-    .then((data) => res.send({
+    .then((data) => { return res.send({
       email: data.email,
       name: data.name,
       about: data.about,
       avatar: data.avatar,
       _id: data._id,
-    }))
+    })
+  })
     .then((user) => {
       if (!user) {
         throw new errorhandler('Unsuccessful Request', 400);
