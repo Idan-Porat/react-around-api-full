@@ -18,7 +18,7 @@ module.exports.getAllUsers = (req, res) => {
       throw error;
     })
     .then((user) => {
-      res.status(STAT_CODE_200).send( user );
+      res.status(STAT_CODE_200).send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -45,24 +45,25 @@ module.exports.getUser = (req, res, next) => {
 
 module.exports.createUser = (req, res, next) => {
   const { email, password } = req.body;
-  return bcrypt
+  bcrypt
     .hash(password, 10)
     .then((hash) => {
       return User.create({ email: req.body.email, password: hash });
     })
-    .then((data) => { return res.send({
-      email: data.email,
-      name: data.name,
-      about: data.about,
-      avatar: data.avatar,
-      _id: data._id,
+    .then((data) => {
+      res.send({
+        email: data.email,
+        name: data.name,
+        about: data.about,
+        avatar: data.avatar,
+        _id: data._id,
+      })
     })
-  })
     .then((user) => {
       if (!user) {
         throw new errorhandler('Unsuccessful Request', 400);
       }
-      return res.send({ user });
+      res.send({ user });
     })
     .catch(next);
 };
@@ -79,7 +80,7 @@ module.exports.updateProfile = (req, res) => {
     error.statusCode = ERR_CODE_404;
     throw error;
   })
-    .then((user) => res.status(STAT_CODE_200).send( user ))
+    .then((user) => res.status(STAT_CODE_200).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(ERR_CODE_400).send(err);
@@ -103,7 +104,7 @@ module.exports.updateAvatar = (req, res) => {
     error.statusCode = ERR_CODE_404;
     throw error;
   })
-    .then((user) => res.status(STAT_CODE_200).send( user ))
+    .then((user) => res.status(STAT_CODE_200).send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res.status(ERR_CODE_400).send(err);
