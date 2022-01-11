@@ -13,7 +13,7 @@ class Auth {
     return res.json();
   }
 
-  register = (email, password) => {
+  register = ({ email, password }) => {
     console.log({ email, password })
     return fetch(`${this._baseURL}/signup`, {
       method: "POST",
