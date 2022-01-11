@@ -11,7 +11,7 @@ const ERR_CODE_500 = 500;
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getAllUsers = (req, res) => {
-  User.find({})
+  return User.find({})
     .orFail(() => {
       const error = new Error('users not found');
       error.statusCode = ERR_CODE_404;
@@ -33,7 +33,7 @@ module.exports.getAllUsers = (req, res) => {
 
 module.exports.getUser = (req, res, next) => {
   const { userId } = req.params;
-  User.findById({ _id: userId })
+  return User.findById({ _id: userId })
     .then((user) => {
       if (!user) {
         throw new errorhandler('No user with matching ID found', 404);
@@ -71,7 +71,7 @@ module.exports.createUser = (req, res, next) => {
 module.exports.updateProfile = (req, res) => {
   const { name, about } = req.body;
   const { _id } = req.user;
-  User.findByIdAndUpdate(
+  return User.findByIdAndUpdate(
     _id,
     { name, about },
     { new: true, runValidators: true },
@@ -95,7 +95,7 @@ module.exports.updateProfile = (req, res) => {
 module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
   const { _id } = req.user;
-  User.findByIdAndUpdate(
+  return User.findByIdAndUpdate(
     _id,
     { avatar },
     { new: true, runValidators: true },
