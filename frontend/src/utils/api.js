@@ -1,7 +1,8 @@
 class Api {
 
-    constructor({ baseURL }) {
+    constructor({ baseURL, headers }) {
         this._baseURL = baseURL;
+        this._headers = headers;
     }
 
     _getResponseData(res) {
@@ -11,55 +12,43 @@ class Api {
         return res.json();
     }
 
-    getInitialCards = (token) => {
+    getInitialCards = () => {
         return fetch(`${this._baseURL}/cards`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
+            headers: this._headers,
         })
             .then(res => this._getResponseData(res))
+            .then(res => {
+                return res.data;
+            })
     }
 
-    getUserInfo = (token) => {
+    getUserInfo = () => {
         return fetch(`${this._baseURL}/users/me`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
+            headers: this._headers,
         })
             .then(res => this._getResponseData(res))
     }
 
-    createNewCard = (data, token) => {
+    createNewCard = (data) => {
         return fetch(`${this._baseURL}/cards`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
+            headers: this._headers,
             method: 'POST',
             body: JSON.stringify(data)
         })
             .then(res => this._getResponseData(res))
     }
 
-    deleteCard = (cardId, token) => {
+    deleteCard = (cardId) => {
         return fetch(`${this._baseURL}/cards/${cardId}`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
+            headers:this._headers,
             method: 'DELETE'
         })
             .then(res => this._getResponseData(res))
     }
 
-    setUserInfo = ({ name, about }, token) => {
+    setUserInfo = ({ name, about }) => {
         return fetch(`${this._baseURL}/users/me`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
+            headers:this._headers,
             method: 'PATCH',
             body: JSON.stringify({
                 name: name,
@@ -69,12 +58,9 @@ class Api {
             .then(res => this._getResponseData(res))
     }
 
-    setUserImage = (avatar, token) => {
+    setUserImage = (avatar) => {
         return fetch(`${this._baseURL}/users/me/avatar`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
+            headers: this._headers,
             method: 'PATCH',
             body: JSON.stringify({
                 avatar: avatar
@@ -83,18 +69,19 @@ class Api {
             .then(res => this._getResponseData(res))
     }
 
-    changeLikeCardStatus = (cardId, isLiked, token) => {
+    changeLikeCardStatus = (cardId, isLiked) => {
         return fetch(`${this._baseURL}/cards/likes/${cardId}`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
+            headers: this._headers,
             method: `${isLiked ? "PUT" : "DELETE"}`,
         })
-        .then(res => this._getResponseData(res))
+            .then(res => this._getResponseData(res))
     }
 }
 
 export default new Api({
     baseURL: "https://api.around-porat.students.nomoreparties.sbs",
+    headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${localStorage.getItem('jwt')}`,
+    },
 });

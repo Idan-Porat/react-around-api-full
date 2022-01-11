@@ -65,7 +65,7 @@ function App() {
 
     // Send a request to the Api and getting the updated card data
     Api
-      .changeLikeCardStatus(card._id, !isLiked, token)
+      .changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {
         const { data } = newCard;
         setCards((state) => state.map((c) => (c._id === card._id ? data : c)));
@@ -74,28 +74,28 @@ function App() {
   }
 
   useEffect(() => {
-    console.log(token)
-    if (token) {
+    const jwt = localStorage.getItem("jwt");
+    Api._headers.auhtorization = `Bearer ${jwt}`
+    console.log(jwt)
       Api
-        .getUserInfo(token)
+        .getUserInfo()
         .then((res) => {
-          setCurrentUser(res.data);
+          setCurrentUser(res);
           setEmail(res.email);
         })
         .catch((err) => console.log(err));
       Api
-        .getInitialCards(token)
+        .getInitialCards()
         .then((cards) => {
           setCards(cards.data);
         })
         .catch((err) => console.log(err));
-    }
   }, [loggedIn]);
 
   const handleDeleteCard = async () => {
     const id = selectedCard._id;
     try {
-      await Api.deleteCard(id, token);
+      await Api.deleteCard(id);
       setCards(cards.filter((card) => card._id !== id))
       closeAllPopups();
     } catch (error) {
@@ -137,7 +137,7 @@ function App() {
   const handleUpdateUser = async (data) => {
     try {
       return Api
-        .setUserInfo(data, token)
+        .setUserInfo(data)
         .then((res) => {
           setCurrentUser(res)
           closeAllPopups();
@@ -150,7 +150,7 @@ function App() {
   const handleUpdateAvatar = async (data) => {
     try {
       return await Api
-        .setUserImage(data.avatar, token).then(res => {
+        .setUserImage(data.avatar).then(res => {
           setCurrentUser(res)
           closeAllPopups();
         })
@@ -162,7 +162,7 @@ function App() {
 
   const handleAddPlaceSubmit = async (card) => {
     try {
-      await Api.createNewCard(card, token).then((res) => {
+      await Api.createNewCard(card).then((res) => {
         setCards((Cards) => {
           return [res].concat(Cards)
         })
@@ -202,9 +202,9 @@ function App() {
 
   // Check if logged in and f user has a token in local storage, check if it is valid.
   useEffect(() => {
-    if (token) {
+    if (localStorage.getItem('jwt')) {
       return Auth
-        .checkToken(token)
+        .checkToken(localStorage.getItem('jwt'))
         .then((res) => {
           setLoggedIn(true);
           setEmail({ email: res.data.email });
