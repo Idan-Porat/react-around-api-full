@@ -75,7 +75,7 @@ function App() {
 
   useEffect(() => {
     const jwt = localStorage.getItem("jwt");
-    Api._headers.auhtorization = `Bearer ${jwt}`
+    Api._headers.authorization = `Bearer ${jwt}`;
     console.log(jwt)
       Api
         .getUserInfo()
@@ -180,7 +180,7 @@ function App() {
         if (data) {
           setLoggedIn(true); // we're updating the state inside App.js
           setToken(data.token);
-          navigate('/');
+          navigate('/home');
           console.log(currentUser)
           console.log("User logged in")
         }
