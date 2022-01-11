@@ -87,7 +87,7 @@ function App() {
           console.log(`Error: ${error}`);
         });
     }
-  }, [loggedIn]);
+  }, [token]);
 
   useEffect(() => {
     console.log(token)
@@ -96,16 +96,17 @@ function App() {
         .getUserInfo(token)
         .then((res) => {
           setCurrentUser(res.data);
-          Api
-            .getInitialCards(token)
-            .then((cards) => {
-              setCards(cards.data);
-            })
-            .catch((err) => console.log(err));
+          setEmail(res.email);
+        })
+        .catch((err) => console.log(err));
+      Api
+        .getInitialCards(token)
+        .then((cards) => {
+          setCards(cards.data);
         })
         .catch((err) => console.log(err));
     }
-  }, [token]);
+  }, [loggedIn]);
 
   const handleDeleteCard = async () => {
     const id = selectedCard._id;
