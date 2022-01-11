@@ -48,7 +48,6 @@ userSchema.statics.findUserByCredentials = function findUserByCredentials(email,
         if (!password) {
           return Promise.reject(new Error(err.name));
         }
-        return password;
       }))
         .then((matched) => {
           if (!matched) {
