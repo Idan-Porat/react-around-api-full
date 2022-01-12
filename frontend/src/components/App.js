@@ -99,11 +99,11 @@ function App() {
       Api
         .getInitialCards(token)
         .then((cards) => {
-          setCards(cards);
+          return setCards(cards);
         })
         .catch((err) => console.log(err));
     }
-  }, []);
+  }, [loggedIn]);
 
 
 
@@ -125,7 +125,7 @@ function App() {
   const handleDeleteCard = async () => {
     const id = selectedCard._id;
     try {
-      await Api.deleteCard(id, token);
+      await Api.deleteCard(id, token)
       setCards(cards.filter((card) => card._id !== id))
       closeAllPopups();
     } catch (error) {
@@ -192,7 +192,7 @@ function App() {
 
   const handleAddPlaceSubmit = async (card) => {
     try {
-      await Api.createNewCard(card, token).then((res) => {
+      return await Api.createNewCard(card, token).then((res) => {
         setCards((Cards) => {
           return [res].concat(Cards)
         })
@@ -209,6 +209,7 @@ function App() {
       .then((data) => {
         if (data.token) {
           setLoggedIn(true); // we're updating the state inside App.js
+          console.log(data.token)
           setToken(data.token);
           setEmail(email);
           setCurrentUser(currentUser)
