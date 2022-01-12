@@ -22,7 +22,7 @@ function Card(props) {
             {isOwn && (
             <button type="button" onClick={() => onCardDelete(card)} className={`${cardDeleteButtonClassName}`} aria-label="delete button"></button>
             )}
-            <div className="elements__pic" onClick={() => cardClickHandler(card)} style={{ backgroundImage: `url(${card.link})` }} alt={card.name}></div>
+            <div className="elements__pic" onClick={() => cardClickHandler(card)} style={{ backgroundImage: `url(${card.imageLink})` }} alt={card.name}></div>
             <div className="elements__inner-container">
                 <h2 className="elements__title">{card.name}</h2>
                 <div className="elements__likes-container">
