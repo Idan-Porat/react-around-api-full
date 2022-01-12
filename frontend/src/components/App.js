@@ -72,7 +72,7 @@ function App() {
   // Check if the user logged in and if user has a token in local storage, check if it is valid.
   useEffect(() => {
     verifyToken();
-  }, [token ,navigate]);
+  }, [navigate]);
 
   function verifyToken() {
     if (token) {
@@ -192,17 +192,13 @@ function App() {
   };
 
 
-  const handleAddPlaceSubmit = async (card) => {
-    try {
-      await Api.createNewCard(card, token).then((res) => {
-        setCards((Cards) => {
-          return [res].concat(Cards)
-        })
-        closeAllPopups();
-      })
-    } catch (error) {
-      console.log(`Error: ${error}`);
-    }
+  const handleAddPlaceSubmit = (card) => {
+    Api
+    .createNewCard(card, token)
+    .then((newCard) => {
+      setCards([...cards, newCard.data]);
+    })
+    .catch((err) => console.log(err))
   };
 
   const handleLogin = () => {

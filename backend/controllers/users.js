@@ -44,7 +44,7 @@ module.exports.getUser = (req, res, next) => {
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
-  const { email } = req.params;
+  const { email } = req.user;
   return User.findOne({ email })
     .then((user) => {
       if (!user) {
