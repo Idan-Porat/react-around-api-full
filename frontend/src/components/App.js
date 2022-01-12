@@ -61,7 +61,7 @@ function App() {
 
   const getUserInfo = async () => {
     try {
-      const callData = await Api.getUserInfo();
+      const callData = await Api.getUserInfo(token);
       callData && setCurrentUser(callData);
       setEmail(callData.email);
     } catch (error) {
@@ -94,16 +94,11 @@ function App() {
   //Get user info and cards.
   useEffect(() => {
     if (token) {
+      getUserInfo();
       Api
-        .getUserInfo(token)
-        .then((res) => {
-          setCurrentUser(res.data);
-          Api
-            .getInitialCards(token)
-            .then((cards) => {
-              setCards(cards);
-            })
-            .catch((err) => console.log(err));
+        .getInitialCards(token)
+        .then((cards) => {
+          setCards(cards);
         })
         .catch((err) => console.log(err));
     }
@@ -194,11 +189,11 @@ function App() {
 
   const handleAddPlaceSubmit = (card) => {
     Api
-    .createNewCard(card, token)
-    .then((newCard) => {
-      setCards([...cards, newCard.data]);
-    })
-    .catch((err) => console.log(err))
+      .createNewCard(card, token)
+      .then((newCard) => {
+        setCards([...cards, newCard.data]);
+      })
+      .catch((err) => console.log(err))
   };
 
   const handleLogin = () => {
