@@ -167,7 +167,7 @@ function App() {
 
   const handleAddPlaceSubmit = async (card) => {
     try {
-      await Api.createNewCard(card, token).then((newCard) => {
+      return await Api.createNewCard(card, token).then((newCard) => {
         setCards([...cards, newCard])
         closeAllPopups();
       })
