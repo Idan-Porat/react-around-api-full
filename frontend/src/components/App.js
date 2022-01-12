@@ -165,16 +165,18 @@ function App() {
   };
 
 
-  const handleAddPlaceSubmit = async (card) => {
-    try {
-      return await Api.createNewCard(card, token).then((newCard) => {
-        setCards([...cards, newCard])
-        closeAllPopups();
-      })
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const handleAddPlaceSubmit = async (card) => { 
+    try { 
+      await Api.createNewCard(card, token).then((res) => { 
+        setCards((Cards) => { 
+          return [res].concat(Cards) 
+        }) 
+        closeAllPopups(); 
+      }) 
+    } catch (error) { 
+      console.log(error); 
+    } 
+  }; 
 
   const handleLogin = () => {
     setLoggedIn(!loggedIn);
