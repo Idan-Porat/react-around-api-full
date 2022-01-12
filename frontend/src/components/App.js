@@ -57,6 +57,8 @@ function App() {
   // User password state
   const [password, setPassword] = useState("");
 
+  const [token, setToken] = useState(localStorage.getItem('jwt'));
+
   const getUserInfo = async () => {
     try {
       const callData = await Api.getUserInfo();
@@ -67,18 +69,45 @@ function App() {
     }
   }
 
+  // Check if the user logged in and if user has a token in local storage, check if it is valid.
   useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    Api._headers.authorization = `Bearer ${jwt}`;
-    console.log(jwt)
-    getUserInfo();
-    Api
-      .getInitialCards()
-      .then((cards) => {
-        setCards(cards);
-      })
-      .catch((err) => console.log(err));
-  }, [loggedIn]);
+    verifyToken();
+  }, [token ,navigate]);
+
+  function verifyToken() {
+    if (token) {
+      return Auth
+        .checkToken(token)
+        .then((res) => {
+          setEmail(res.data.email);
+          setLoggedIn(true)
+          navigate('/')
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setLoggedIn(false);
+    }
+  }
+
+  //Get user info and cards.
+  useEffect(() => {
+    if (token) {
+      Api
+        .getUserInfo(token)
+        .then((res) => {
+          setCurrentUser(res.data);
+          Api
+            .getInitialCards(token)
+            .then((cards) => {
+              setCards(cards);
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [token]);
 
 
   const handleCardLike = (card) => {
@@ -87,7 +116,7 @@ function App() {
 
     // Send a request to the Api and getting the updated card data
     Api
-      .changeLikeCardStatus(card._id, !isLiked)
+      .changeLikeCardStatus(card._id, !isLiked, token)
       .then((newCard) => {
         const { data } = newCard;
         setCards((state) => state.map((c) => (c._id === card._id ? data : c)));
@@ -98,7 +127,7 @@ function App() {
   const handleDeleteCard = async () => {
     const id = selectedCard._id;
     try {
-      await Api.deleteCard(id);
+      await Api.deleteCard(id, token);
       setCards(cards.filter((card) => card._id !== id))
       closeAllPopups();
     } catch (error) {
@@ -140,7 +169,7 @@ function App() {
   const handleUpdateUser = async (data) => {
     try {
       return Api
-        .setUserInfo(data)
+        .setUserInfo(data, token)
         .then((res) => {
           setCurrentUser(res)
           closeAllPopups();
@@ -153,7 +182,7 @@ function App() {
   const handleUpdateAvatar = async (data) => {
     try {
       return await Api
-        .setUserImage(data.avatar).then(res => {
+        .setUserImage(data.avatar, token).then(res => {
           setCurrentUser(res)
           closeAllPopups();
         })
@@ -165,7 +194,7 @@ function App() {
 
   const handleAddPlaceSubmit = async (card) => {
     try {
-      await Api.createNewCard(card).then((res) => {
+      await Api.createNewCard(card, token).then((res) => {
         setCards((Cards) => {
           return [res].concat(Cards)
         })
@@ -180,10 +209,11 @@ function App() {
     console.log("try to log")
     return Auth.authorize(email, password)
       .then((data) => {
-        if (data) {
+        if (data.token) {
           setLoggedIn(true); // we're updating the state inside App.js
-          navigate('/home');
+          setToken(data.token);
           console.log(currentUser)
+          navigate('/');
           console.log("User logged in")
         }
       })
@@ -202,27 +232,6 @@ function App() {
     navigate('/signin');
   }
 
-  // Check if logged in and f user has a token in local storage, check if it is valid.
-  useEffect(() => {
-    verifyToken();
-  }, [navigate]);
-
-  function verifyToken() {
-    const jwt = localStorage.getItem("jwt");
-    if (localStorage.getItem("jwt")) {
-      return Auth
-        .checkToken(jwt)
-        .then((res) => {
-          setLoggedIn(true)
-          navigate('/home')
-          setEmail(res.data.email);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }
-
   // Close popups by esc key.
   useEffect(() => {
     const closeByEscape = (e) => {
@@ -237,7 +246,7 @@ function App() {
   }, [])
 
   const path = useLocation();
-  const findPath = path.pathname === '/home' ? "Log out" : path.pathname === '/signin' ? "Sign up" : "Log in";
+  const findPath = path.pathname === '/' ? "Log out" : path.pathname === '/signin' ? "Sign up" : "Log in";
 
   const titleOfThePopup = path.pathname === '/signin' ? 'Success! You have now been registered.' : 'Oops, something went wrong! Please try again.';
   const popupMessageImage = path.pathname === '/signin' ? successToLog : failToLog;
@@ -264,7 +273,7 @@ function App() {
             />}>
             </Route>
             <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-              <Route path='/home' element={<Main
+              <Route path='/' element={<Main
                 onEditProfileClick={handleEditProfileClick}
                 onAddPlaceClick={handleAddPlaceClick}
                 onEditAvatarClick={handleEditAvatarClick}
@@ -280,7 +289,6 @@ function App() {
                 isDeleteImagePopupOpen={isDeleteImagePopupOpen}
                 cardData={selectedCard}
               />} />
-              <Route path='/' />
             </Route>
           </Routes>
           <Footer />

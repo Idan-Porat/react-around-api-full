@@ -17,9 +17,7 @@ class Auth {
     console.log({ email, password })
     return fetch(`${this._baseURL}/signup`, {
       method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: this._headers,
       body: JSON.stringify({
         password,
         email,
@@ -27,7 +25,6 @@ class Auth {
     })
       .then((res) => this._getResponseData(res))
       .then((res) => {
-        console.log(res)
         return res;
       })
   };
@@ -35,9 +32,7 @@ class Auth {
   authorize = (email, password) => {
     return fetch(`${this._baseURL}/signin`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: this._headers,
       body: JSON.stringify({ password, email })
     })
       .then((res) => this._getResponseData(res))
@@ -54,9 +49,10 @@ class Auth {
     return fetch(`${this._baseURL}/users/me`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-        authorization: `Bearer ${token}`
-      }
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     })
       .then((res) => this._getResponseData(res))
       .then((res) => {
@@ -69,4 +65,8 @@ class Auth {
 
 export default new Auth({
   baseURL: "https://api.around-porat.students.nomoreparties.sbs",
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  }
 });
