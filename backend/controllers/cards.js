@@ -29,14 +29,10 @@ module.exports.getCards = (req, res) => {
 
 module.exports.createCard = (req, res, next) => {
   const { _id } = req.user;
-  return Card.create({ name: req.body.name, imageLink: req.body.imageLink, owner: _id })
-  .then((data) => {
-    res.send({
-      name: data.name,
-      imageLink: data.imageLink,
-      owner: data.owner
-    })
-  })
+  const {
+    name, imageLink,
+  } = req.body;
+  return Card.create({ name: name, imageLink: req.body.link, owner: _id })
   .then((card) => {
     if (!card) {
       throw new errorhandler('Unsuccessful Request', 400);
