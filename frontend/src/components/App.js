@@ -186,7 +186,7 @@ function App() {
 
   const handleLogOut = () => {
     setLoggedIn(false)
-    localStorage.clear();
+    localStorage.removeItem('jwt');
     setPassword('')
     setEmail('')
     navigate('/signin');
