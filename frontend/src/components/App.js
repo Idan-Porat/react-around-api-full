@@ -102,7 +102,7 @@ function App() {
         })
         .catch((err) => console.log(err));
     }
-  }, [token]);
+  }, [loggedIn]);
 
 
   const handleCardLike = (card) => {
@@ -187,18 +187,23 @@ function App() {
   };
 
 
-  const handleAddPlaceSubmit = (card) => {
-    Api
-      .createNewCard(card, token)
-      .then((newCard) => {
-        setCards([...cards, newCard.data]);
-      })
-      .catch((err) => console.log(err))
+  const handleAddPlaceSubmit = async (card) => {
+    try {
+      return await Api
+        .createNewCard(card, token)
+        .then((newCard) => {
+          setCards([...cards, newCard.data]);
+          closeAllPopups();
+        })
+    }
+    catch (error) {
+      console.log(`Error: ${error}`);
+    }
   };
 
   const handleLogin = () => {
     console.log("try to log")
-    return Auth.authorize(email, password)
+    Auth.authorize(email, password)
       .then((data) => {
         if (data.token) {
           setLoggedIn(true); // we're updating the state inside App.js
