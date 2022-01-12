@@ -165,7 +165,7 @@ function App() {
 
   const handleAddPlaceSubmit = async (card) => {
     try {
-      return await Api.createNewCard(card, token).then((res) => {
+      await Api.createNewCard(card, token).then((res) => {
         setCards((Cards) => {
           return [res].concat(Cards)
         })
@@ -177,18 +177,7 @@ function App() {
   };
 
   const handleLogin = () => {
-    console.log("try to log")
-    Auth.authorize(email, password)
-      .then((data) => {
-        if (data.token) {
-          setLoggedIn(true); // we're updating the state inside App.js
-          console.log(data.token)
-          setToken(data.token);
-          navigate('/');
-          console.log("User logged in")
-        }
-      })
-      .catch((err) => console.log(`Error: ${err}`));
+    setLoggedIn(!loggedIn);
   }
 
   const handleRegisterd = () => {
@@ -197,7 +186,7 @@ function App() {
 
   const handleLogOut = () => {
     setLoggedIn(false)
-    localStorage.removeItem("jwt");
+    localStorage.clear();
     setPassword('')
     setEmail('')
     navigate('/signin');
@@ -213,9 +202,9 @@ function App() {
       Auth
         .checkToken(token)
         .then((res) => {
-          setEmail(res.data.email)
+          navigate('/')
           setLoggedIn(true)
-          navigate('/');
+          setEmail(res.data.email)
         })
         .catch((err) => {
           console.log(err);
@@ -255,6 +244,7 @@ function App() {
               setPassword={setPassword}
               email={email}
               handleLogin={handleLogin}
+              setToken={setToken}
               password={password}
               loggedIn={loggedIn}
             />}>
