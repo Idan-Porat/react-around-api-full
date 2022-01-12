@@ -67,7 +67,6 @@ function App() {
       console.log(callData)
       callData && setCurrentUser(callData);
       console.log(callData.email)
-      setEmail(callData.email)
     } catch (error) {
       console.log(error);
     }
