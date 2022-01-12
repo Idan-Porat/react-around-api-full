@@ -83,19 +83,22 @@ function App() {
     }
   }, [token])
 
-  const handleCardLike = (card) => {
-    // Check one more time if this card was already liked
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+  const handleCardLike = (card) => { 
 
-    // Send a request to the Api and getting the updated card data
-    Api
-      .changeLikeCardStatus(card._id, !isLiked, token)
-      .then((newCard) => {
-        const { data } = newCard;
-        setCards((state) => state.map((c) => (c._id === card._id ? data : c)));
-      })
-      .catch((err) => console.log(err));
-  }
+    // Check one more time if this card was already liked 
+    const isLiked = card.likes.some(i => i._id === currentUser._id); 
+    // Send a request to the API and getting the updated card data 
+    if (isLiked) { 
+      Api.unLikeCard(card._id, token).then((newCard) => { 
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c)); 
+
+      }).catch((error) => console.log(error)); 
+    } else { 
+      Api.likeCard(card._id, token).then((newCard) => { 
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c)); 
+      }).catch((error) => console.log(error)); 
+    } 
+  } 
 
   const handleDeleteCard = async () => {
     const id = selectedCard._id;
