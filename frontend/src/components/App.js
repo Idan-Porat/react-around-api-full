@@ -59,16 +59,6 @@ function App() {
 
   const [token, setToken] = useState(localStorage.getItem('jwt'));
 
-  const getUserInfo = async () => {
-    try {
-      const callData = await Api.getUserInfo(token);
-      callData && setCurrentUser(callData);
-      setEmail(callData.email);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   // Check if the user logged in and if user has a token in local storage, check if it is valid.
   useEffect(() => {
     verifyToken();
@@ -91,6 +81,15 @@ function App() {
     }
   }
 
+  const getUserInfo = async () => {
+    try {
+      const callData = await Api.getUserInfo(token);
+      callData && setCurrentUser(callData);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   //Get user info and cards.
   useEffect(() => {
     if (token) {
@@ -102,7 +101,9 @@ function App() {
         })
         .catch((err) => console.log(err));
     }
-  }, [loggedIn]);
+  }, []);
+
+
 
 
   const handleCardLike = (card) => {
@@ -189,15 +190,14 @@ function App() {
 
   const handleAddPlaceSubmit = async (card) => {
     try {
-      return await Api
-        .createNewCard(card, token)
-        .then((newCard) => {
-          setCards([...cards, newCard.data]);
-          closeAllPopups();
+      await Api.createNewCard(card, token).then((res) => {
+        setCards((Cards) => {
+          return [res].concat(Cards)
         })
-    }
-    catch (error) {
-      console.log(`Error: ${error}`);
+        closeAllPopups();
+      })
+    } catch (error) {
+      console.log(error);
     }
   };
 
