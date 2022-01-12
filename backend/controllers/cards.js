@@ -33,6 +33,13 @@ module.exports.createCard = (req, res) => {
     name, imageLink,
   } = req.body;
   return Card.create({ name, imageLink, owner: _id })
+  .then((data) => {
+    res.send({
+      name: data.name,
+      imageLink: data.imageLink,
+      owner: data._id,
+    })
+  })
   .then((card) => {
     if (!card) {
       throw new errorhandler('Unsuccessful Request', 400);
