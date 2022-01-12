@@ -55,9 +55,6 @@ class Auth {
       },
     })
       .then((res) => this._getResponseData(res))
-      .then((res) => {
-        return res;
-      })
   }
 }
 

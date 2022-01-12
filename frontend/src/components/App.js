@@ -59,13 +59,7 @@ function App() {
 
   const [token, setToken] = useState(localStorage.getItem('jwt'));
 
-  //Get user info and cards.
-  useEffect(() => {
-    Api.getInitialCards(token)
-      .then(res => {
-        setCards(res)
-      }).catch((error) => console.log(error))
-  }, [loggedIn])
+
 
   const getUserInfo = async () => {
     try {
@@ -76,12 +70,16 @@ function App() {
     }
   }
 
+  //Get user info and cards.
   useEffect(() => {
-    getUserInfo();
-  }, [loggedIn]);
-
-
-
+    if (token) {
+      getUserInfo();
+      Api.getInitialCards(token)
+        .then(res => {
+          setCards(res)
+        }).catch((error) => console.log(error))
+    }
+  }, [token])
 
   const handleCardLike = (card) => {
     // Check one more time if this card was already liked
@@ -186,7 +184,7 @@ function App() {
           setLoggedIn(true); // we're updating the state inside App.js
           console.log(data.token)
           setToken(data.token);
-          navigate('/home');
+          navigate('/');
           console.log("User logged in")
         }
       })
@@ -212,12 +210,12 @@ function App() {
 
   function verifyToken() {
     if (token) {
-      return Auth
+      Auth
         .checkToken(token)
         .then((res) => {
-          setEmail(res.data.email);
+          setEmail(res.data.email)
           setLoggedIn(true)
-          navigate('/')
+          navigate('/');
         })
         .catch((err) => {
           console.log(err);

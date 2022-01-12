@@ -43,16 +43,20 @@ module.exports.getUser = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.getCurrentUser = (req, res, next) => {
-  const { email, password } = req.params;
-  return User.findUserByCredentials(email, password)
-    .then((user) => {
-      if (!user) {
-        throw new errorhandler('user not found', 404);
-      }
-      then((user) => res.status(STAT_CODE_200).send({ user }))
-    })
-    .catch(next);
+module.exports.getCurrentUser = async (req, res, next) => {
+  const { _id } = req.user;
+  try {
+    const user = await User.findOne(
+      _id,
+    );
+    if (!user) {
+      throw new errorhandler('user not found', 404);
+    }
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(ERR_CODE_500).send("internal server error");
+  }
 };
 
 module.exports.createUser = (req, res, next) => {
