@@ -64,7 +64,10 @@ function App() {
   const getUserInfo = async () => {
     try {
       const callData = await Api.getUserInfo(token);
+      console.log(callData)
       callData && setCurrentUser(callData);
+      console.log(callData.email)
+      setEmail(callData.email)
     } catch (error) {
       console.log(error);
     }
@@ -76,7 +79,8 @@ function App() {
       getUserInfo();
       Api.getInitialCards(token)
         .then(res => {
-          setCards(res)
+          console.log(res)
+          setCards(res.data)
         }).catch((error) => console.log(error))
     }
   }, [token])
@@ -204,7 +208,7 @@ function App() {
         .then((res) => {
           navigate('/')
           setLoggedIn(true)
-          setEmail(res.data.email)
+          setEmail(res.email)
         })
         .catch((err) => {
           console.log(err);

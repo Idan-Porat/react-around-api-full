@@ -10,7 +10,12 @@ const cardSchema = new mongoose.Schema({
   },
   imageLink: {
     type: String,
-    required: 'There is must be user id',
+    validate: {
+      validator(value) {
+        return validator.isURL(value);
+      },
+      message: 'Please enter a valid URL'
+    },
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,

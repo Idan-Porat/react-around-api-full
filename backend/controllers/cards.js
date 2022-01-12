@@ -1,4 +1,5 @@
 const Card = require('../models/cards');
+const errorhandler = require('../middleware/errorHandler')
 
 const STAT_CODE_200 = 200;
 const ERR_CODE_400 = 400;
@@ -31,26 +32,14 @@ module.exports.createCard = (req, res) => {
   const {
     name, imageLink,
   } = req.body;
-  return Card.create(
-    {
-      name, imageLink, owner: _id,
-    },
-  )
-    .orFail(() => {
-      const error = new Error('Invalid data');
-      error.statusCode = ERR_CODE_400;
-      throw error; // Remember to throw an error so .catch handles it instead of .then
-    })
-    .then((card) => res.status(STAT_CODE_200).send(card))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(ERR_CODE_400).send(err);
-      } else if (err.statusCode === ERR_CODE_404) {
-        res.status(ERR_CODE_404).send(err);
-      } else {
-        res.status(ERR_CODE_500).send({ err } || 'internal server error');
-      }
-    });
+  return Card.create({ name, imageLink, owner: _id })
+  .then((user) => {
+    if (!user) {
+      throw new errorhandler('Unsuccessful Request', 400);
+    }
+    res.send({ user });
+  })
+    .catch(next);
 };
 
 module.exports.deleteCard = (req, res) => {

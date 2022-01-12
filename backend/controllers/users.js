@@ -53,7 +53,7 @@ module.exports.getCurrentUser = (req, res, next) => {
     })
     .then((user) => {
       if (!user) {
-        throw new errorhandler('user not found', 404);
+        throw new errorhandler('user not found', ERR_CODE_404);
       }
       res.send(user);
     })
