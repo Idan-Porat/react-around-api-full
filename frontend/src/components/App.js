@@ -78,7 +78,7 @@ function App() {
       Api.getInitialCards(token)
         .then(res => {
           console.log(res)
-          setCards(res.data)
+          setCards(res)
         }).catch((error) => console.log(error))
     }
   }, [token])
