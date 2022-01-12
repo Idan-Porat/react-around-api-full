@@ -44,13 +44,18 @@ module.exports.getUser = (req, res, next) => {
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
-  const { email } = req.user;
-  return User.findOne({ email })
+  const { _id } = req.user;
+  return User.findById({ _id })
+  .orFail(() => {
+    const error = new Error('user not found');
+    error.statusCode = ERR_CODE_404;
+    throw error;
+  })
     .then((user) => {
       if (!user) {
-        throw new errorhandler('No user with matching ID found', 404);
+        throw new errorhandler('user not found', 404);
       }
-      res.send(user);
+      then((user) => res.status(STAT_CODE_200).send(user))
     })
     .catch(next);
 };

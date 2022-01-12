@@ -18,6 +18,7 @@ import Api from '../utils/api.js';
 import DeletePhotoPopup from './DeletePhotoPopup';
 import failToLog from "../images/failLogin.png";
 import successToLog from "../images/successLogin.png";
+import { set } from 'mongoose';
 
 function App() {
 
@@ -85,6 +86,7 @@ function App() {
     try {
       const callData = await Api.getUserInfo(token);
       callData && setCurrentUser(callData);
+      setEmail(callData.email);
     } catch (error) {
       console.log(error);
     }
@@ -208,6 +210,7 @@ function App() {
         if (data.token) {
           setLoggedIn(true); // we're updating the state inside App.js
           setToken(data.token);
+          setEmail(email);
           setCurrentUser(currentUser)
           console.log(currentUser)
           navigate('/');
