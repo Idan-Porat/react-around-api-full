@@ -203,6 +203,7 @@ function App() {
         if (data.token) {
           setLoggedIn(true); // we're updating the state inside App.js
           setToken(data.token);
+          setCurrentUser(currentUser)
           console.log(currentUser)
           navigate('/');
           console.log("User logged in")
