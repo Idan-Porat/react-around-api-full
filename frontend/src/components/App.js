@@ -23,8 +23,6 @@ function App() {
 
   const navigate = useNavigate();
 
-  const [token, setToken] = useState(localStorage.getItem("jwt"));
-
   const [cards, setCards] = useState([]);
 
   const [currentUser, setCurrentUser] = useState({});
@@ -63,6 +61,7 @@ function App() {
     try {
       const callData = await Api.getUserInfo();
       callData && setCurrentUser(callData);
+      setEmail(callData.email);
     } catch (error) {
       console.log(error);
     }
@@ -76,7 +75,7 @@ function App() {
     Api
       .getInitialCards()
       .then((cards) => {
-        return setCards(cards.data);
+        setCards(cards);
       })
       .catch((err) => console.log(err));
   }, [loggedIn]);
@@ -183,8 +182,7 @@ function App() {
       .then((data) => {
         if (data) {
           setLoggedIn(true); // we're updating the state inside App.js
-          setToken(data.token);
-          navigate('/');
+          navigate('/home');
           console.log(currentUser)
           console.log("User logged in")
         }
@@ -212,11 +210,11 @@ function App() {
   function verifyToken() {
     const jwt = localStorage.getItem("jwt");
     if (localStorage.getItem("jwt")) {
-      Auth
+      return Auth
         .checkToken(jwt)
         .then((res) => {
-          setLoggedIn(true);
-          navigate('/')
+          setLoggedIn(true)
+          navigate('/home')
           setEmail(res.data.email);
         })
         .catch((err) => {
@@ -239,7 +237,7 @@ function App() {
   }, [])
 
   const path = useLocation();
-  const findPath = path.pathname === '/' ? "Log out" : path.pathname === '/signin' ? "Sign up" : "Log in";
+  const findPath = path.pathname === '/home' ? "Log out" : path.pathname === '/signin' ? "Sign up" : "Log in";
 
   const titleOfThePopup = path.pathname === '/signin' ? 'Success! You have now been registered.' : 'Oops, something went wrong! Please try again.';
   const popupMessageImage = path.pathname === '/signin' ? successToLog : failToLog;
@@ -266,7 +264,7 @@ function App() {
             />}>
             </Route>
             <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-              <Route path='/' element={<Main
+              <Route path='/home' element={<Main
                 onEditProfileClick={handleEditProfileClick}
                 onAddPlaceClick={handleAddPlaceClick}
                 onEditAvatarClick={handleEditAvatarClick}
@@ -282,6 +280,7 @@ function App() {
                 isDeleteImagePopupOpen={isDeleteImagePopupOpen}
                 cardData={selectedCard}
               />} />
+              <Route path='/' />
             </Route>
           </Routes>
           <Footer />

@@ -9,11 +9,9 @@ const cardSchema = new mongoose.Schema({
   },
   imageLink: {
     type: String,
-    required: 'URL must be valid',
+    required: true,
     validate: {
-      validator(value) {
-        return validator.isURL(value);
-      },
+      validator: (v) => isEmail(v),
       message: 'Please enter a valid URL'
     },
   },

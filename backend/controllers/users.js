@@ -43,6 +43,18 @@ module.exports.getUser = (req, res, next) => {
     .catch(next);
 };
 
+module.exports.getCurrentUser = (req, res, next) => {
+  const { email } = req.params;
+  return User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        throw new errorhandler('No user with matching ID found', 404);
+      }
+      res.send(user);
+    })
+    .catch(next);
+};
+
 module.exports.createUser = (req, res, next) => {
   const { email, password } = req.body;
   return bcrypt
