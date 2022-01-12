@@ -59,49 +59,25 @@ function App() {
 
   const [token, setToken] = useState(localStorage.getItem('jwt'));
 
-  // Check if the user logged in and if user has a token in local storage, check if it is valid.
-  useEffect(() => {
-    verifyToken();
-  }, [navigate]);
-
-  function verifyToken() {
-    if (token) {
-      return Auth
-        .checkToken(token)
-        .then((res) => {
-          setEmail(res.data.email);
-          setLoggedIn(true)
-          navigate('/')
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      setLoggedIn(false);
-    }
-  }
+  //Get user info and cards.
+  React.useEffect(() => {
+    Api.getInitialCards(token)
+      .then(res => {
+        setCards(res)
+      }).catch((error) => console.log(error))
+  }, [loggedIn])
 
   const getUserInfo = async () => {
     try {
       const callData = await Api.getUserInfo(token);
       callData && setCurrentUser(callData);
-      setEmail(callData.email);
     } catch (error) {
       console.log(error);
     }
   }
 
-  //Get user info and cards.
-  useEffect(() => {
-    if (token) {
-      getUserInfo();
-      Api
-        .getInitialCards(token)
-        .then((cards) => {
-          return setCards(cards);
-        })
-        .catch((err) => console.log(err));
-    }
+  React.useEffect(() => {
+    getUserInfo();
   }, [loggedIn]);
 
 
@@ -210,10 +186,7 @@ function App() {
           setLoggedIn(true); // we're updating the state inside App.js
           console.log(data.token)
           setToken(data.token);
-          setEmail(email);
-          setCurrentUser(currentUser)
-          console.log(currentUser)
-          navigate('/');
+          navigate('/home');
           console.log("User logged in")
         }
       })
@@ -230,6 +203,28 @@ function App() {
     setPassword('')
     setEmail('')
     navigate('/signin');
+  }
+
+  // Check if the user logged in and if user has a token in local storage, check if it is valid.
+  useEffect(() => {
+    verifyToken();
+  }, [navigate]);
+
+  function verifyToken() {
+    if (token) {
+      return Auth
+        .checkToken(token)
+        .then((res) => {
+          setEmail(res.data.email);
+          setLoggedIn(true)
+          navigate('/')
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setLoggedIn(false);
+    }
   }
 
   // Close popups by esc key.

@@ -14,8 +14,8 @@ function Login(props) {
         }
         return handleLogin();
     }
-    return (
 
+    return (
         <AuthForm
             title='Sign in'
             changeRouteName="Not a member yet? Sign up here!"
