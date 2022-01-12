@@ -59,6 +59,29 @@ function App() {
   // User password state
   const [password, setPassword] = useState("");
 
+  const getUserInfo = async () => {
+    try {
+      const callData = await Api.getUserInfo();
+      callData && setCurrentUser(callData);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    const jwt = localStorage.getItem("jwt");
+    Api._headers.authorization = `Bearer ${jwt}`;
+    console.log(jwt)
+    getUserInfo();
+    Api
+      .getInitialCards()
+      .then((cards) => {
+        return setCards(cards.data);
+      })
+      .catch((err) => console.log(err));
+  }, [loggedIn]);
+
+
   const handleCardLike = (card) => {
     // Check one more time if this card was already liked
     const isLiked = card.likes.some(i => i._id === currentUser._id);
@@ -72,24 +95,6 @@ function App() {
       })
       .catch((err) => console.log(err));
   }
-
-  useEffect(() => {
-    const jwt = localStorage.getItem("jwt");
-    Api._headers.authorization = `Bearer ${jwt}`;
-    console.log(jwt)
-      Api
-        .getUserInfo()
-        .then((res) => {
-          setCurrentUser(res);
-        })
-        .catch((err) => console.log(err));
-      Api
-        .getInitialCards()
-        .then((cards) => {
-          return setCards(cards.data);
-        })
-        .catch((err) => console.log(err));
-  }, [loggedIn]);
 
   const handleDeleteCard = async () => {
     const id = selectedCard._id;
@@ -201,21 +206,24 @@ function App() {
 
   // Check if logged in and f user has a token in local storage, check if it is valid.
   useEffect(() => {
-    if (localStorage.getItem('jwt')) {
-      return Auth
-        .checkToken(localStorage.getItem('jwt'))
-        .then((res) => {
-          setLoggedIn(true);
-          setEmail({ email: res.data.email });
-          navigate('/')
-        })
-        .catch((error) => {
-          console.log(`Error: ${error}`);
-        });
-    }
+    verifyToken();
   }, [navigate]);
 
-
+  function verifyToken() {
+    const jwt = localStorage.getItem("jwt");
+    if (localStorage.getItem("jwt")) {
+      Auth
+        .checkToken(jwt)
+        .then((res) => {
+          setLoggedIn(true);
+          navigate('/')
+          setEmail(res.data.email);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
 
   // Close popups by esc key.
   useEffect(() => {
