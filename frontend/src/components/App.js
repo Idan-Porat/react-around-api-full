@@ -18,7 +18,6 @@ import Api from '../utils/api.js';
 import DeletePhotoPopup from './DeletePhotoPopup';
 import failToLog from "../images/failLogin.png";
 import successToLog from "../images/successLogin.png";
-import { set } from 'mongoose';
 
 function App() {
 
