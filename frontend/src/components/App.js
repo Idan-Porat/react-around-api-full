@@ -81,7 +81,7 @@ function App() {
           setCards(res.data)
         }).catch((error) => console.log(error))
     }
-  }, [token])
+  }, [loggedIn])
 
   const handleCardLike = (card) => {
     // Check one more time if this card was already liked
@@ -186,7 +186,7 @@ function App() {
 
   const handleLogOut = () => {
     setLoggedIn(false)
-    localStorage.removeItem('jwt');
+    localStorage.clear();
     setPassword('')
     setEmail('')
     navigate('/signin');
