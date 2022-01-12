@@ -33,11 +33,11 @@ module.exports.createCard = (req, res) => {
     name, imageLink,
   } = req.body;
   return Card.create({ name, imageLink, owner: _id })
-  .then((user) => {
-    if (!user) {
+  .then((card) => {
+    if (!card) {
       throw new errorhandler('Unsuccessful Request', 400);
     }
-    res.send({ user });
+    res.send({ card });
   })
     .catch(next);
 };

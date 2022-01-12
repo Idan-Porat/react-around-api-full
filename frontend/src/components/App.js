@@ -66,7 +66,6 @@ function App() {
       const callData = await Api.getUserInfo(token);
       console.log(callData)
       callData && setCurrentUser(callData);
-      console.log(callData.email)
     } catch (error) {
       console.log(error);
     }
@@ -168,10 +167,8 @@ function App() {
 
   const handleAddPlaceSubmit = async (card) => {
     try {
-      await Api.createNewCard(card, token).then((res) => {
-        setCards((Cards) => {
-          return [res].concat(Cards)
-        })
+      await Api.createNewCard(card, token).then((newCard) => {
+        setCards([...cards, newCard])
         closeAllPopups();
       })
     } catch (error) {
