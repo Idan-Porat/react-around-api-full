@@ -6,9 +6,8 @@ const { celebrate }  = require('celebrate');
 const Joi = require('joi');
 const { validateUrl } = require('../middleware/validateUrl')
 
-
-cardRouter.post('/cards', createCard);
 cardRouter.get('/cards', getCards);
+cardRouter.post('/cards', createCard);
 cardRouter.delete('/cards/:cardId', deleteCard);
 cardRouter.put('/cards/:cardId/likes', likeCard);
 cardRouter.delete('/cards/:cardId/likes', dislikeCard);
