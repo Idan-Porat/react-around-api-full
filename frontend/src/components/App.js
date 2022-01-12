@@ -60,7 +60,7 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem('jwt'));
 
   //Get user info and cards.
-  React.useEffect(() => {
+  useEffect(() => {
     Api.getInitialCards(token)
       .then(res => {
         setCards(res)
@@ -76,7 +76,7 @@ function App() {
     }
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     getUserInfo();
   }, [loggedIn]);
 
