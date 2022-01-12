@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -9,11 +10,7 @@ const cardSchema = new mongoose.Schema({
   },
   imageLink: {
     type: String,
-    required: true,
-    validate: {
-      validator: (v) => isEmail(v),
-      message: 'Please enter a valid URL'
-    },
+    required: 'There is must be user id',
   },
   owner: {
     type: mongoose.Schema.Types.ObjectId,
