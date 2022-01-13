@@ -84,7 +84,7 @@ class Api {
     }
 
     changeLikeCardStatus = (cardId, isLiked, token) => {
-        return fetch(`${this._baseURL}/cards/likes/${cardId}`, {
+        return fetch(`${this._baseURL}/cards/${cardId}/likes`, {
             headers: {
                 "content-type": "application/json",
                 authorization: `Bearer ${token}`,
