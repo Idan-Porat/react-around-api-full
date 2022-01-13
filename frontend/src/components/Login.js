@@ -5,7 +5,7 @@ import AuthForm from "./AuthForm";
 import Auth from "../utils/auth";
 function Login(props) {
 
-    const { handleLogin, setToken, email, password, setPassword, setEmail } = props;
+    const { handleLogin, email, password, setPassword, setEmail } = props;
 
     const navigate = useNavigate();
     const handleSubmit = (e) => {
@@ -17,8 +17,7 @@ function Login(props) {
         return Auth.authorize(email, password)
             .then((data) => {
                 if (data.token) {
-                    handleLogin(); // we're updating the state inside App.js 
-                    setToken(data.token);
+                    handleLogin(data.token); // we're updating the state inside App.js 
                     navigate('/home');
                 }
             })

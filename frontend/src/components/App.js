@@ -179,8 +179,9 @@ function App() {
     }
   };
 
-  const handleLogin = () => {
+  const handleLogin = (dataToken) => {
     setLoggedIn(!loggedIn);
+    setToken(dataToken);
   }
 
   const handleRegisterd = () => {
@@ -189,8 +190,8 @@ function App() {
 
   const handleLogOut = () => {
     setLoggedIn(false)
-    setToken(localStorage.removeItem('jwt'));
-    localStorage.removeItem('jwt')
+    localStorage.removeItem("jwt")
+    setToken(localStorage.removeItem("jwt"));
     setPassword('')
     setEmail('')
     navigate('/signin');
