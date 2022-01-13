@@ -84,6 +84,8 @@ function App() {
   }, [token])
 
   const handleCardLike = (card) => {
+    console.log(card)
+    console.log(card.likes)
     const isLiked = card.likes.some((i) => i === currentUser._id);
     Api
       .changeLikeCardStatus(card._id, !isLiked, token)
@@ -94,10 +96,10 @@ function App() {
   }
 
   const handleDeleteCard = async () => {
-    const id = selectedCard._id;
+    console.log(selectedCard._id)
     try {
-      await Api.deleteCard(id, token)
-      setCards(cards.filter((card) => card._id !== id))
+      await Api.deleteCard(selectedCard._id, token)
+      setCards(cards.filter((card) => card._id !== selectedCard._id))
       closeAllPopups();
     } catch (error) {
       console.log(error);
@@ -162,9 +164,12 @@ function App() {
 
 
   const handleAddPlaceSubmit = async (card) => {
+    console.log(card)
     try {
       await Api.createNewCard(card, token).then((res) => {
         setCards((Cards) => {
+          console.log(res)
+          console.log(Cards)
           return [res].concat(Cards)
         })
         closeAllPopups();
