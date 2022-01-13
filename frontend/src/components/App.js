@@ -86,7 +86,7 @@ function App() {
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((i) => i === currentUser._id);
     Api
-      .changeLikeCardStatus(card._id, !isLiked, token)
+      .changeLikeCardStatus(card.owner, !isLiked, token)
       .then((newCard) => {
         setCards((state) => state.map((c) => (c._id === card._id ? newCard : c)));
       })
@@ -97,7 +97,7 @@ function App() {
     const id = selectedCard._id;
     try {
       await Api.deleteCard(id, token)
-      setCards(cards.filter((card) => card._id !== id))
+      setCards(cards.filter((card) => card.owner !== id))
       closeAllPopups();
     } catch (error) {
       console.log(error);
