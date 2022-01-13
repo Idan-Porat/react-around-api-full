@@ -12,7 +12,7 @@ function Card(props) {
     );
 
     // Check if the card was liked by the current user
-    const isLiked = card.likes?.includes(currentUser._id);
+    const isLiked = card.likes.includes(currentUser._id);
 
     // Create a variable which you then set in `className` for the like button
     const cardLikeButtonClassName = `elements__like-button ${isLiked ? 'elements__like-button_active' : 'elements__like-button_hidden'}`;
@@ -28,7 +28,7 @@ function Card(props) {
                 <div className="elements__likes-container">
                     <button onClick={() => onCardLike(card)} type="button" className={`${cardLikeButtonClassName}`} aria-label="like button"></button>
                     <p className="element__like-counter">
-                        {card.likes.length}
+                        {card.likes.length - 1}
                     </p>
                 </div>
             </div>
