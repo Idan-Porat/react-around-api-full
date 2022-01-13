@@ -30,14 +30,15 @@ module.exports.getCards = (req, res) => {
 module.exports.createCard = (req, res, next) => {
   const { _id } = req.user;
   const {
-    name, imageLink,
+    name, imageLink, likes
   } = req.body;
-  return Card.create({ name: name, imageLink: imageLink, owner: _id })
+  return Card.create({ name: name, imageLink: imageLink, owner: _id, likes : likes })
   .then((data) => {
     res.send({
       name: data.name,
       imageLink: data.imageLink,
-      owner: data.owner
+      owner: data.owner,
+      likes: data.likes
     })
   })
   .then((card) => {
