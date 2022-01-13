@@ -164,7 +164,7 @@ function App() {
 
   const handleAddPlaceSubmit = (card) => {
     Api
-      .addCard(card, token)
+      .createNewCard(card, token)
       .then((newCard) => {
         setCards([...cards, newCard.data]);
       })

@@ -83,17 +83,7 @@ class Api {
             .then(res => this._getResponseData(res))
     }
 
-    likeCard = (cardId, token) => {
-        return fetch(`${this._baseURL}/cards/likes/${cardId}`, {
-            headers: {
-                "content-type": "application/json",
-                authorization: `Bearer ${token}`,
-            },
-            method: 'PUT'
-        })
-            .then(res => this._getResponseData(res))
-    }
-    unLikeCard = (cardId, isLiked, token) => {
+    changeLikeCardStatus = (cardId, isLiked, token) => {
         return fetch(`${this._baseURL}/cards/likes/${cardId}`, {
             headers: {
                 "content-type": "application/json",
