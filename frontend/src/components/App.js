@@ -66,6 +66,7 @@ function App() {
       const callData = await Api.getUserInfo(token);
       console.log(callData)
       callData && setCurrentUser(callData);
+      setEmail(callData.email);
     } catch (error) {
       console.log(error);
     }
@@ -192,6 +193,7 @@ function App() {
     setLoggedIn(false)
     localStorage.removeItem("jwt")
     setToken(localStorage.removeItem("jwt"));
+    setCurrentUser({})
     setPassword('')
     setEmail('')
     navigate('/signin');
