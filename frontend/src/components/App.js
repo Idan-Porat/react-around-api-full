@@ -162,13 +162,17 @@ function App() {
   };
 
 
-  const handleAddPlaceSubmit = (card) => {
-    Api
-      .createNewCard(card, token)
-      .then((newCard) => {
-        setCards([...cards, newCard.data]);
+  const handleAddPlaceSubmit = async (card) => {
+    try {
+      await Api.createNewCard(card, token).then((res) => {
+        setCards((Cards) => {
+          return [res].concat(Cards)
+        })
+        closeAllPopups();
       })
-      .catch((err) => console.log(err));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleLogin = () => {
