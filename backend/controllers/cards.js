@@ -29,7 +29,6 @@ module.exports.getCards = (req, res) => {
 
 module.exports.createCard = (req, res, next) => {
   const { _id } = req.user;
-
   const {
     name, imageLink, likes
   } = req.body;
