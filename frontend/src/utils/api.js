@@ -93,18 +93,17 @@ class Api {
         })
             .then(res => this._getResponseData(res))
     }
-    unLikeCard = (cardId, token) => {
+    unLikeCard = (cardId, isLiked, token) => {
         return fetch(`${this._baseURL}/cards/likes/${cardId}`, {
             headers: {
                 "content-type": "application/json",
                 authorization: `Bearer ${token}`,
             },
-            method: 'DELETE'
+            method: `${isLiked ? "PUT" : "DELETE"}`,
         })
             .then(res => this._getResponseData(res))
     }
-
-} 
+}
 
 export default new Api({
     baseURL: "https://api.around-porat.students.nomoreparties.sbs",

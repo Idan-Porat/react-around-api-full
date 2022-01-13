@@ -83,22 +83,16 @@ function App() {
     }
   }, [token])
 
-  const handleCardLike = (card) => { 
-
-    // Check one more time if this card was already liked 
-    const isLiked = card.likes.some(i => i._id === currentUser._id); 
-    // Send a request to the API and getting the updated card data 
-    if (isLiked) { 
-      Api.unLikeCard(card._id, !isLiked, token).then((newCard) => { 
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c)); 
-
-      }).catch((error) => console.log(error)); 
-    } else { 
-      Api.likeCard(card._id, !isLiked, token).then((newCard) => { 
-        setCards((state) => state.map((c) => c._id === card._id ? newCard : c)); 
-      }).catch((error) => console.log(error)); 
-    } 
-  } 
+  const handleCardLike = (card) => {
+    const isLiked = card.likes.some((i) => i === currentUser._id);
+    Api
+      .changeLikeCardStatus(card._id, !isLiked, token)
+      .then((newCard) => {
+        const { data } = newCard;
+        setCards((state) => state.map((c) => (c._id === card._id ? data : c)));
+      })
+      .catch((err) => console.log(err));
+  }
 
   const handleDeleteCard = async () => {
     const id = selectedCard._id;
@@ -168,18 +162,18 @@ function App() {
   };
 
 
-  const handleAddPlaceSubmit = async (card) => { 
-    try { 
-      await Api.createNewCard(card, token).then((res) => { 
-        setCards((Cards) => { 
-          return [res].concat(Cards) 
-        }) 
-        closeAllPopups(); 
-      }) 
-    } catch (error) { 
-      console.log(error); 
-    } 
-  }; 
+  const handleAddPlaceSubmit = async (card) => {
+    try {
+      await Api.createNewCard(card, token).then((res) => {
+        setCards((Cards) => {
+          return [res].concat(Cards)
+        })
+        closeAllPopups();
+      })
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleLogin = () => {
     setLoggedIn(!loggedIn);
