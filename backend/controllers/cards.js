@@ -38,7 +38,8 @@ module.exports.createCard = (req, res, next) => {
       name: data.name,
       imageLink: data.imageLink,
       owner: data.owner,
-      likes: data.likes
+      likes: data.likes,
+      _id: data._id,
     })
   })
   .then((card) => {
