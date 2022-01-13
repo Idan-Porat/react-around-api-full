@@ -28,7 +28,7 @@ function Card(props) {
                 <div className="elements__likes-container">
                     <button onClick={() => onCardLike(card)} type="button" className={`${cardLikeButtonClassName}`} aria-label="like button"></button>
                     <p className="element__like-counter">
-                        {card.likes.length}
+                        {card.likes.length - 1}
                     </p>
                 </div>
             </div>

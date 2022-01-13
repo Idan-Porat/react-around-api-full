@@ -163,7 +163,7 @@ function App() {
 
   const handleAddPlaceSubmit = async (card) => {
     try {
-      return await Api.createNewCard(card, token).then((res) => {
+      await Api.createNewCard(card, token).then((res) => {
         setCards((Cards) => {
           return [res].concat(Cards)
         })
