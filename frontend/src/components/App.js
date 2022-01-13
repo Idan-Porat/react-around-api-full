@@ -89,12 +89,12 @@ function App() {
     const isLiked = card.likes.some(i => i._id === currentUser._id); 
     // Send a request to the API and getting the updated card data 
     if (isLiked) { 
-      Api.unLikeCard(card._id, token).then((newCard) => { 
+      Api.unLikeCard(card._id, !isLiked, token).then((newCard) => { 
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c)); 
 
       }).catch((error) => console.log(error)); 
     } else { 
-      Api.likeCard(card._id, token).then((newCard) => { 
+      Api.likeCard(card._id, !isLiked, token).then((newCard) => { 
         setCards((state) => state.map((c) => c._id === card._id ? newCard : c)); 
       }).catch((error) => console.log(error)); 
     } 
