@@ -4,19 +4,19 @@ import PopupWithForm from "./PopupWithForm";
 function AddPlacePopup(props) {
     const { isOpen, onClose, addNewPhoto } = props;
     const [name, setName] = React.useState("");
-    const [link, setLink] = React.useState("");
+    const [imageLink, setImageLink] = React.useState("");
 
     React.useEffect(() => {
         if (isOpen) {
             setName("");
-            setLink("");
+            setImageLink("");
         }
     }, [isOpen]);
 
 
     function handleSubmit(e) {
         e.preventDefault();
-        addNewPhoto({ name, link });
+        addNewPhoto({ name, imageLink });
     }
 
     return (
@@ -27,8 +27,8 @@ function AddPlacePopup(props) {
                 <span className="popup__item-error title-input-error"></span>
             </label>
             <label className="popup__field">
-                <input placeholder="Image link" id="url-input" value={link} className="popup__item popup__item_type_url"
-                    name="link" type="url" onChange={(e) => setLink(e.target.value)} required />
+                <input placeholder="Image link" id="url-input" value={imageLink} className="popup__item popup__item_type_url"
+                    name="link" type="url" onChange={(e) => setImageLink(e.target.value)} required />
                 <span className="popup__item-error url-input-error"></span>
             </label>
         </PopupWithForm>

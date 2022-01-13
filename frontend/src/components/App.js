@@ -165,7 +165,7 @@ function App() {
     try {
       await Api.createNewCard(card, token).then((res) => {
         setCards((Cards) => {
-          return [res].concat(Cards.data)
+          return [res].concat(Cards)
         })
         closeAllPopups();
       })
