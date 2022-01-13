@@ -32,7 +32,7 @@ module.exports.createCard = (req, res, next) => {
   const {
     name, imageLink
   } = req.body;
-  return Card.create({ name: name, imageLink: imageLink, owner: _id })
+  return Card.create({ name, imageLink, owner: _id })
   .then((data) => {
     res.send({
       name: data.name,
