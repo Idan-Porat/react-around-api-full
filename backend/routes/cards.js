@@ -9,7 +9,7 @@ const { validateUrl } = require('../middleware/validateUrl')
 cardRouter.post('/cards', createCard);
 cardRouter.get('/cards', getCards);
 cardRouter.delete('/cards/:cardId', deleteCard);
-cardRouter.put('/cards/:cardId/likes', likeCard);
-cardRouter.delete('/cards/:cardId/likes', dislikeCard);
+cardRouter.put('/cards/likes/:cardId', likeCard);
+cardRouter.delete('/cards/likes/:cardId', dislikeCard);
 
 module.exports = cardRouter;

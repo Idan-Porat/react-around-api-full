@@ -22,7 +22,7 @@ const cardSchema = new mongoose.Schema({
     required: 'There is must be user id',
   },
   likes: {
-    type: mongoose.Schema.Types.Array,
+    type: mongoose.Schema.Types.ObjectId,
     default: {},
   },
   createdAt: {
