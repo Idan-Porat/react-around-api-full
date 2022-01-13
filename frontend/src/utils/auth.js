@@ -13,7 +13,6 @@ class Auth {
   }
 
   register = (email, password) => {
-    console.log({ email, password })
     return fetch(`${this._baseURL}/signup`, {
       method: "POST",
       headers: this._headers,
@@ -44,7 +43,6 @@ class Auth {
   };
 
   checkToken = (token) => {
-    console.log(token)
     return fetch(`${this._baseURL}/users/me`, {
       method: 'GET',
       headers: {
