@@ -84,8 +84,6 @@ function App() {
   }, [token])
 
   const handleCardLike = (card) => {
-    console.log(card)
-    console.log(card.likes)
     const isLiked = card.likes.some((i) => i === currentUser._id);
     Api
       .changeLikeCardStatus(card._id, !isLiked, token)
@@ -96,7 +94,6 @@ function App() {
   }
 
   const handleDeleteCard = async () => {
-    console.log(selectedCard._id)
     try {
       await Api.deleteCard(selectedCard._id, token)
       setCards(cards.filter((card) => card._id !== selectedCard._id))
@@ -164,7 +161,6 @@ function App() {
 
 
   const handleAddPlaceSubmit = async (card) => {
-    console.log(card)
     try {
       await Api.createNewCard(card, token).then((res) => {
         setCards((Cards) => {
@@ -181,12 +177,14 @@ function App() {
 
   const handleLogin = () => {
     setEmail(email);
+    console.log(email)
     if (!email || !password) {
       return;
     }
     return Auth.authorize(email, password)
       .then((data) => {
         if (data.token) {
+          console.log(data.token)
           setLoggedIn(!loggedIn);
           setToken(data.token); // we're updating the state inside App.js 
           navigate('/home');
@@ -201,8 +199,9 @@ function App() {
 
   const handleLogOut = () => {
     setLoggedIn(false)
-    localStorage.removeItem("jwt")
+    localStorage.clear("jwt")
     setToken(localStorage.removeItem("jwt"));
+    console.log(token)
     setCurrentUser({})
     setPassword('')
     setEmail('')
@@ -216,6 +215,7 @@ function App() {
 
   function verifyToken() {
     if (token) {
+      console.log(token)
       Auth
         .checkToken(token)
         .then((res) => {
