@@ -180,9 +180,20 @@ function App() {
     }
   };
 
-  const handleLogin = (dataToken) => {
-    setLoggedIn(!loggedIn);
-    setToken(dataToken);
+  const handleLogin = () => {
+    setEmail(email);
+    if (!email || !password) {
+      return;
+    }
+    return Auth.authorize(email, password)
+      .then((data) => {
+        if (data.token) {
+          setLoggedIn(!loggedIn);
+          setToken(data.token); // we're updating the state inside App.js 
+          navigate('/home');
+        }
+      })
+      .catch((err) => console.log(err));
   }
 
   const handleRegisterd = () => {
