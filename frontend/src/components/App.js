@@ -93,13 +93,15 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  const handleDeleteCard = (card) => {
-    Api
-      .deleteCard(card._id, token)
-      .then((res) => {
-        setCards((cards) => cards.filter((c) => c._id !== card._id));
-      })
-      .catch((err) => console.log(err));
+  const handleDeleteCard = async () => {
+    const id = selectedCard._id;
+    try {
+      await Api.deleteCard(id, token)
+      setCards(cards.filter((card) => card._id !== id))
+      closeAllPopups();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleDeleteImageClick = (newSelectedCard) => {
