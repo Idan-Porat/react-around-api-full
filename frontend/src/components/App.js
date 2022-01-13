@@ -66,7 +66,6 @@ function App() {
       const callData = await Api.getUserInfo(token);
       console.log(callData)
       callData && setCurrentUser(callData);
-      setEmail(callData.email);
     } catch (error) {
       console.log(error);
     }
