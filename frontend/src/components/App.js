@@ -229,9 +229,9 @@ function App() {
   const handleLogOut = () => {
     console.log("logged out");
     setLoggedIn(false);
-    localStorage.removeItem(token);
-    console.log(token)
-    setToken(localStorage.removeItem(token));
+    localStorage.removeItem("jwt");
+    console.log(localStorage.removeItem("jwt"));
+    setToken("");
     console.log(token)
     navigate("/");
   }
