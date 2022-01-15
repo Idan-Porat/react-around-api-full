@@ -58,10 +58,10 @@ function App() {
 
   // Check if the user logged in and if user has a token in local storage, check if it is valid.
   useEffect(() => {
-    if (token) {
-      console.log(token)
+    if (localStorage.getItem("jwt")) {
+      console.log(localStorage.getItem("jwt"))
       Auth
-        .checkToken(token)
+        .checkToken(localStorage.getItem("jwt"))
         .then((res) => {
           setEmail(res.email);
           setLoggedIn(true);
@@ -73,7 +73,7 @@ function App() {
     } else {
       setLoggedIn(false);
     }
-  }, [token]);
+  }, [loggedIn]);
 
   const getUserInfo = async (token) => {
     try {
@@ -89,8 +89,8 @@ function App() {
 
   //Get user info and cards.
   useEffect(() => {
-    if (token) {
-      getUserInfo(token);
+    if (localStorage.getItem("jwt")) {
+      getUserInfo(localStorage.getItem("jwt"));
       Api.getInitialCards(token)
         .then(res => {
           console.log(res)
@@ -98,7 +98,7 @@ function App() {
         })
         .catch((error) => console.log(error))
     }
-  }, [token])
+  }, [loggedIn])
 
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((i) => i === currentUser._id);
