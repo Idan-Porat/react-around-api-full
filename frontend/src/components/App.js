@@ -77,7 +77,7 @@ function App() {
 
   const getUserInfo = async (token) => {
     try {
-      await Api.getUserInfo(token).then(res => {
+      return await Api.getUserInfo(token).then(res => {
         console.log(res)
         console.log(res.email)
         setCurrentUser(res);
@@ -90,7 +90,7 @@ function App() {
   //Get user info and cards.
   useEffect(() => {
     if (token) {
-      getUserInfo(localStorage.getItem("jwt"));
+      getUserInfo(token);
       Api.getInitialCards(token)
         .then(res => {
           console.log(res)
@@ -229,9 +229,9 @@ function App() {
   const handleLogOut = () => {
     console.log("logged out");
     setLoggedIn(false);
-    localStorage.removeItem("jwt");
+    localStorage.removeItem(token);
     console.log(token)
-    setToken(localStorage.removeItem("jwt"));
+    setToken(localStorage.removeItem(token));
     console.log(token)
     navigate("/");
   }
