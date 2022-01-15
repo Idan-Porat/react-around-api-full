@@ -90,7 +90,7 @@ function App() {
   //Get user info and cards.
   useEffect(() => {
     if (token) {
-      getUserInfo(token);
+      getUserInfo(localStorage.getItem("jwt"));
       Api.getInitialCards(token)
         .then(res => {
           console.log(res)
@@ -230,7 +230,9 @@ function App() {
     console.log("logged out");
     setLoggedIn(false);
     localStorage.removeItem("jwt");
+    console.log(token)
     setToken(localStorage.removeItem("jwt"));
+    console.log(token)
     navigate("/");
   }
 
