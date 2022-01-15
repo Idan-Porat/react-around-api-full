@@ -77,16 +77,13 @@ function App() {
 
   const getUserInfo = async (token) => {
     try {
-      return Api
-        .getUserInfo(token)
-        .then((res) => {
-          console.log(res);
-          setCurrentUser(res)
-        })
+      const callData = await Api.getUserInfo(token);
+      console.log(callData)
+      callData && setCurrentUser(callData);
     } catch (error) {
-      console.log(`Error: ${error}`);
+      console.log(error);
     }
-  };
+  }
 
   //Get user info and cards.
   useEffect(() => {
@@ -216,12 +213,14 @@ function App() {
         if (res) {
           setIsMessageOfRegPopupOpen(!isMessageOfRegPopupOpen)
           navigate('/signin')
+        } else {
+          console.log('Somthing went wrong');
         }
       })
       .catch((err) => {
         setIsMessageOfRegPopupOpen(!isMessageOfRegPopupOpen)
         console.log(err)
-      });
+      })
 
   }
 
