@@ -58,10 +58,6 @@ function App() {
 
   // Check if the user logged in and if user has a token in local storage, check if it is valid.
   useEffect(() => {
-    verifyToken();
-  }, [token]);
-
-  function verifyToken() {
     if (token) {
       console.log(token)
       Auth
@@ -77,7 +73,7 @@ function App() {
     } else {
       setLoggedIn(false);
     }
-  }
+  }, [loggedIn]);
 
   const getUserInfo = async (token) => {
     try {
@@ -85,7 +81,6 @@ function App() {
         console.log(res)
         console.log(res.email)
         setCurrentUser(res);
-        setEmail(res.email);
       })
     } catch (error) {
       console.log(error);
