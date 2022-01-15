@@ -56,8 +56,26 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("jwt"));
 
 
+  // Check if the user logged in and if user has a token in local storage, check if it is valid.
+  useEffect(() => {
+    if (token) {
+      console.log(token)
+      Auth
+        .checkToken(token)
+        .then((res) => {
+          setEmail(res.data.email);
+          setLoggedIn(true);
+          navigate('/');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setLoggedIn(false);
+    }
+  }, [token, navigate]);
 
-  const getUserInfo = async () => {
+  const getUserInfo = async (token) => {
     try {
       const callData = await Api.getUserInfo(token);
       console.log(callData)
@@ -70,7 +88,7 @@ function App() {
   //Get user info and cards.
   useEffect(() => {
     if (token) {
-      getUserInfo();
+      getUserInfo(token);
       Api.getInitialCards(token)
         .then(res => {
           console.log(res)
@@ -172,6 +190,7 @@ function App() {
   };
 
   const handleLogin = (email, password) => {
+    setEmail(email)
     if (!email || !password) {
       return;
     }
@@ -179,9 +198,9 @@ function App() {
       .then((data) => {
         if (data.token) {
           console.log(data.token)
+          setToken(data.token);
           setLoggedIn(!loggedIn);
-          setToken(data.token); // we're updating the state inside App.js 
-          navigate('/home');
+          navigate('/');
         }
       })
       .catch((err) => console.log(err));
@@ -210,29 +229,6 @@ function App() {
     setLoggedIn(false);
     localStorage.removeItem("jwt");
     navigate("/");
-  }
-
-  // Check if the user logged in and if user has a token in local storage, check if it is valid.
-  useEffect(() => {
-    verifyToken();
-  }, [token, navigate]);
-
-  function verifyToken() {
-    if (token) {
-      console.log(token)
-      Auth
-        .checkToken(token)
-        .then((res) => {
-          setEmail(res.data.email);
-          setLoggedIn(true);
-          navigate('/');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      setLoggedIn(false);
-    }
   }
 
   // Close popups by esc key.
