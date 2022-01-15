@@ -77,7 +77,7 @@ function App() {
 
   const getUserInfo = async (token) => {
     try {
-      return await Api.getUserInfo(token).then(res => {
+      return Api.getUserInfo(token).then(res => {
         console.log(res)
         console.log(res.email)
         setCurrentUser(res);
