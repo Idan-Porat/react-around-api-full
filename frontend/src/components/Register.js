@@ -20,8 +20,8 @@ function Register(props) {
             changeRouteName="Already a member? Log in here!"
             loggedIn={loggedIn}
             onSubmit={handleSubmit}
-            onChangeEmail={(e) => setPassword(e.target.value)}
-            inChangePassword={(e) => setEmail(e.target.value)}
+            onChangeEmail={(e) => setEmail(e.target.value)}
+            inChangePassword={(e) => setPassword(e.target.value)}
             valueEmail={email}
             valuePassword={password}
         />

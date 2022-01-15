@@ -18,8 +18,8 @@ function Login(props) {
             title='Sign in'
             changeRouteName="Not a member yet? Sign up here!"
             onSubmit={handleSubmit}
-            onChangeEmail={(e) => setPassword(e.target.value)}
-            inChangePassword={(e) => setEmail(e.target.value)}
+            onChangeEmail={(e) => setEmail(e.target.value)}
+            inChangePassword={(e) => setPassword(e.target.value)}
             valueEmail={email}
             valuePassword={password}
         />
