@@ -1,37 +1,16 @@
-import React from "react";
+import { useState } from "react";
 import AuthForm from "./AuthForm";
 import withRouter from "./withRouter";
-import { useNavigate } from 'react-router-dom';
-import Auth from "../utils/auth";
+
 function Register(props) {
 
     const { handleRegisterd, loggedIn } = props
-    const [email, setEmail] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    const navigate = useNavigate();
-
-    const handleChange = (e) => {
-        const { email, password } = e.target;
-        setPassword(password)
-        setEmail(email);
-    }
-
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("work")
-        Auth.register(email, password)
-            .then((res) => {
-                if (res) {
-                    navigate('/signin')
-                    handleRegisterd()
-                } else {
-                    console.log('Somthing went wrong');
-                }
-            })
-            .catch((err) => {
-                handleRegisterd()
-                console.log(err)
-            })
+        handleRegisterd(email, password);
     }
 
     return (
@@ -41,11 +20,10 @@ function Register(props) {
             changeRouteName="Already a member? Log in here!"
             loggedIn={loggedIn}
             onSubmit={handleSubmit}
-            onChangeText={handleChange}
-            email={email}
-            password={password}
-            setEmail={setEmail}
-            setPassword={setPassword}
+            onChangeEmail={(e) => setPassword(e.target.value)}
+            inChangePassword={(e) => setEmail(e.target.value)}
+            valueEmail={email}
+            valuePassword={password}
         />
     )
 }

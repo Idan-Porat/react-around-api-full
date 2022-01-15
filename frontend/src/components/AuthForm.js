@@ -5,7 +5,7 @@ import { useFormAndValidation } from "../utils/useFormAndValidation";
 
 function AuthForm(props) {
 
-    const { title, email, password, setEmail, setPassword, changeRouteName, onSubmit, validate} = props;
+    const { title, valueEmail, valuePassword, changeRouteName, onChangeEmail, onChangePassword, onSubmit, validate} = props;
 
     const navigate = useNavigate();
     const findPath = (useLocation().pathname === "/signup") ? "/signin" : "/signup" ;
@@ -26,13 +26,13 @@ function AuthForm(props) {
                     <fieldset className="popup__set user-form__set">
                         <h2 className="popup__header user-form__header">{title}</h2>
                         <label className="popup__field">
-                            <input onChange={(e) => setEmail(e.target.value)} value={email} placeholder="Email" id="email-input" className="popup__item user-form__item" name="email"
+                            <input onChange={onChangeEmail} value={valueEmail} placeholder="Email" id="email-input" className="popup__item user-form__item" name="email"
                                 type="text" required minLength="2" maxLength="40" />
                             <span className="popup__item-error user-form-error"></span>
                         </label>
                         <label className="popup__field">
-                            <input onChange={(e) => setPassword(e.target.value)} placeholder="Password" id="password-input" className="popup__item user-form__item"
-                                name="password" type="password" value={password} required minLength="2" maxLength="200" />
+                            <input onChange={onChangePassword} placeholder="Password" id="password-input" className="popup__item user-form__item"
+                                name="password" type="password" value={valuePassword} required minLength="2" maxLength="200" />
                             <span className="popup__item-error user-form-error"></span>
                         </label>
                         <button className="popup__submit-button user-form__submit-button" type="submit"

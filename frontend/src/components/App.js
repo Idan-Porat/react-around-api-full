@@ -51,13 +51,9 @@ function App() {
   // Login state
   const [loggedIn, setLoggedIn] = useState(false);
 
-  // User email state
   const [email, setEmail] = useState("");
 
-  // User password state
-  const [password, setPassword] = useState("");
-
-  const [token, setToken] = useState(localStorage.getItem('jwt'));
+  const [token, setToken] = useState(localStorage.getItem("jwt"));
 
 
 
@@ -81,7 +77,7 @@ function App() {
           setCards(res)
         }).catch((error) => console.log(error))
     }
-  }, [loggedIn])
+  }, [token])
 
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((i) => i === currentUser._id);
@@ -175,9 +171,7 @@ function App() {
     }
   };
 
-  const handleLogin = () => {
-    setEmail(email);
-    console.log(email)
+  const handleLogin = (email, password) => {
     if (!email || !password) {
       return;
     }
@@ -193,25 +187,35 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  const handleRegisterd = () => {
-    setIsMessageOfRegPopupOpen(!isMessageOfRegPopupOpen)
+  const handleRegisterd = (email, password) => {
+    console.log("work")
+    Auth.register(email, password)
+      .then((res) => {
+        if (res) {
+          navigate('/signin')
+          setIsMessageOfRegPopupOpen(!isMessageOfRegPopupOpen)
+        } else {
+          console.log('Somthing went wrong');
+        }
+      })
+      .catch((err) => {
+        setIsMessageOfRegPopupOpen(!isMessageOfRegPopupOpen)
+        console.log(err)
+      })
+
   }
 
   const handleLogOut = () => {
-    setLoggedIn(false)
-    localStorage.clear("jwt")
-    setToken(localStorage.removeItem("jwt"));
-    console.log(token)
-    setCurrentUser({})
-    setPassword('')
-    setEmail('')
-    navigate('/signin');
+    console.log("logged out");
+    setLoggedIn(false);
+    localStorage.removeItem("jwt");
+    navigate("/");
   }
 
   // Check if the user logged in and if user has a token in local storage, check if it is valid.
   useEffect(() => {
     verifyToken();
-  }, [navigate]);
+  }, [token, navigate]);
 
   function verifyToken() {
     if (token) {
@@ -219,9 +223,9 @@ function App() {
       Auth
         .checkToken(token)
         .then((res) => {
-          navigate('/')
-          setLoggedIn(true)
-          setEmail(res.email)
+          setEmail(res.data.email);
+          setLoggedIn(true);
+          navigate('/');
         })
         .catch((err) => {
           console.log(err);
@@ -258,11 +262,8 @@ function App() {
           <Routes>
             <Route path='/signin' element={<Login
               setEmail={setEmail}
-              setPassword={setPassword}
               email={email}
               handleLogin={handleLogin}
-              setToken={setToken}
-              password={password}
               loggedIn={loggedIn}
             />}>
             </Route>

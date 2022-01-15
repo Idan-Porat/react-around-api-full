@@ -1,9 +1,12 @@
-import React from "react";
+import { useState } from "react";
 import withRouter from "./withRouter";
 import AuthForm from "./AuthForm";
 function Login(props) {
 
-    const { handleLogin, email, password, setPassword, setEmail } = props;
+    const { handleLogin, } = props;
+    
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -15,10 +18,10 @@ function Login(props) {
             title='Sign in'
             changeRouteName="Not a member yet? Sign up here!"
             onSubmit={handleSubmit}
-            email={email}
-            password={password}
-            setEmail={setEmail}
-            setPassword={setPassword}
+            onChangeEmail={(e) => setPassword(e.target.value)}
+            inChangePassword={(e) => setEmail(e.target.value)}
+            valueEmail={email}
+            valuePassword={password}
         />
     )
 }
