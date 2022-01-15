@@ -77,28 +77,25 @@ function App() {
 
   const getUserInfo = async (token) => {
     try {
-      const callData = await Api.getUserInfo(token);
-      console.log(callData)
-      callData && setCurrentUser(callData);
+      return Api
+        .getUserInfo(token)
+        .then((res) => {
+          console.log(res);
+          setCurrentUser(res)
+        })
     } catch (error) {
-      console.log(error);
+      console.log(`Error: ${error}`);
     }
-  }
+  };
 
   //Get user info and cards.
   useEffect(() => {
     if (token) {
+      getUserInfo(token)
       Api
-        .getUserInfo(token)
-        .then((res) => {
-          console.log(res);
-          setCurrentUser(res);
-          Api
-            .getInitialCards(token)
-            .then((cards) => {
-              setCards(cards);
-            })
-            .catch((err) => console.log(err));
+        .getInitialCards(token)
+        .then((cards) => {
+          setCards(cards);
         })
         .catch((err) => console.log(err));
     }
@@ -231,8 +228,6 @@ function App() {
   const handleLogOut = () => {
     console.log("logged out");
     setLoggedIn(false);
-    setToken("")
-    setCurrentUser({});
     localStorage.removeItem("jwt");
     navigate("/");
   }
