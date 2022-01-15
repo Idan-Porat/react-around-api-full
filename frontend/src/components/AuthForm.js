@@ -26,12 +26,12 @@ function AuthForm(props) {
                     <fieldset className="popup__set user-form__set">
                         <h2 className="popup__header user-form__header">{title}</h2>
                         <label className="popup__field">
-                            <input onChange={onChangeEmail} value={valueEmail} placeholder="Email" id="email-input" className="popup__item user-form__item" name="email"
-                                type="text" required minLength="2" maxLength="40" />
+                            <input onChange={onChangeEmail} value={valueEmail} placeholder="Email" id="email" className="popup__item user-form__item" name="email"
+                                type="email" required minLength="2" maxLength="40" />
                             <span className="popup__item-error user-form-error"></span>
                         </label>
                         <label className="popup__field">
-                            <input onChange={onChangePassword} placeholder="Password" id="password-input" className="popup__item user-form__item"
+                            <input onChange={onChangePassword} placeholder="Password" id="password" className="popup__item user-form__item"
                                 name="password" type="password" value={valuePassword} required minLength="2" maxLength="200" />
                             <span className="popup__item-error user-form-error"></span>
                         </label>

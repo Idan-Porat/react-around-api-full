@@ -201,7 +201,7 @@ function App() {
     if (!email || !password) {
       return;
     }
-    return Auth.authorize(email, password)
+    Auth.authorize(email, password)
       .then((data) => {
         if (data.token) {
           console.log(data.token)
@@ -214,26 +214,25 @@ function App() {
   }
 
   const handleRegisterd = (email, password) => {
-    console.log("work")
     Auth.register(email, password)
       .then((res) => {
         if (res) {
-          navigate('/signin')
           setIsMessageOfRegPopupOpen(!isMessageOfRegPopupOpen)
-        } else {
-          console.log('Somthing went wrong');
+          navigate('/signin')
         }
       })
       .catch((err) => {
         setIsMessageOfRegPopupOpen(!isMessageOfRegPopupOpen)
         console.log(err)
-      })
+      });
 
   }
 
   const handleLogOut = () => {
     console.log("logged out");
     setLoggedIn(false);
+    setToken("")
+    setCurrentUser({});
     localStorage.removeItem("jwt");
     navigate("/");
   }
