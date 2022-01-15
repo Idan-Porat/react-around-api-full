@@ -81,7 +81,7 @@ function App() {
           setCards(res)
         }).catch((error) => console.log(error))
     }
-  }, [token])
+  }, [loggedIn])
 
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((i) => i === currentUser._id);
