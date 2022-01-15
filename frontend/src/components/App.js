@@ -56,6 +56,28 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("jwt"));
 
 
+  // Check if the user logged in and if user has a token in local storage, check if it is valid.
+  useEffect(() => {
+    verifyToken();
+  }, [token]);
+
+  function verifyToken() {
+    if (token) {
+      console.log(token)
+      Auth
+        .checkToken(token)
+        .then((res) => {
+          setEmail(res.email);
+          setLoggedIn(true);
+          navigate('/');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setLoggedIn(false);
+    }
+  }
 
   const getUserInfo = async (token) => {
     try {
@@ -78,7 +100,8 @@ function App() {
         .then(res => {
           console.log(res)
           setCards(res)
-        }).catch((error) => console.log(error))
+        })
+        .catch((error) => console.log(error))
     }
   }, [token])
 
@@ -163,8 +186,6 @@ function App() {
     try {
       await Api.createNewCard(card, token).then((res) => {
         setCards((Cards) => {
-          console.log(res)
-          console.log(Cards)
           return [res].concat(Cards)
         })
         closeAllPopups();
@@ -212,29 +233,8 @@ function App() {
     console.log("logged out");
     setLoggedIn(false);
     localStorage.removeItem("jwt");
+    setToken(localStorage.removeItem("jwt"));
     navigate("/");
-  }
-
-  // Check if the user logged in and if user has a token in local storage, check if it is valid.
-  useEffect(() => {
-    verifyToken();
-  }, [token, navigate]);
-
-  function verifyToken() {
-    if (token) {
-      console.log(token)
-      Auth
-        .checkToken(token)
-        .then((res) => {
-          setLoggedIn(true);
-          navigate('/');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      setLoggedIn(false);
-    }
   }
 
   // Close popups by esc key.
