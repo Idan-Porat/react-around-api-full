@@ -53,7 +53,7 @@ function App() {
 
   const [email, setEmail] = useState("");
 
-  const [token, setToken] = useState(localStorage.getItem("jwt"));
+  const [token, setToken] = useState("");
 
 
   // Check if the user logged in and if user has a token in local storage, check if it is valid.
@@ -73,7 +73,7 @@ function App() {
     } else {
       setLoggedIn(false);
     }
-  }, [loggedIn]);
+  }, [token]);
 
   const getUserInfo = async (token) => {
     try {
@@ -230,9 +230,6 @@ function App() {
     console.log("logged out");
     setLoggedIn(false);
     localStorage.removeItem("jwt");
-    console.log(localStorage.removeItem("jwt"));
-    setToken("");
-    console.log(token)
     navigate("/");
   }
 
