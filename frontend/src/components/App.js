@@ -56,24 +56,6 @@ function App() {
   const [token, setToken] = useState(localStorage.getItem("jwt"));
 
 
-  // Check if the user logged in and if user has a token in local storage, check if it is valid.
-  useEffect(() => {
-    if (token) {
-      console.log(token)
-      Auth
-        .checkToken(token)
-        .then((res) => {
-          setEmail(res.email);
-          setLoggedIn(true);
-          navigate('/');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      setLoggedIn(false);
-    }
-  }, [navigate, token]);
 
   const getUserInfo = async (token) => {
     try {
@@ -88,13 +70,12 @@ function App() {
   //Get user info and cards.
   useEffect(() => {
     if (token) {
-      getUserInfo(token)
-      Api
-        .getInitialCards(token)
-        .then((cards) => {
-          setCards(cards);
-        })
-        .catch((err) => console.log(err));
+      getUserInfo(token);
+      Api.getInitialCards(token)
+        .then(res => {
+          console.log(res)
+          setCards(res)
+        }).catch((error) => console.log(error))
     }
   }, [token])
 
@@ -191,11 +172,11 @@ function App() {
   };
 
   const handleLogin = (email, password) => {
-    setEmail(email)
+    setEmail(email);
     if (!email || !password) {
       return;
     }
-    Auth.authorize(email, password)
+    return Auth.authorize(email, password)
       .then((data) => {
         if (data.token) {
           console.log(data.token)
@@ -211,8 +192,8 @@ function App() {
     Auth.register(email, password)
       .then((res) => {
         if (res) {
-          setIsMessageOfRegPopupOpen(!isMessageOfRegPopupOpen)
           navigate('/signin')
+          setIsMessageOfRegPopupOpen(!isMessageOfRegPopupOpen)
         } else {
           console.log('Somthing went wrong');
         }
@@ -229,6 +210,29 @@ function App() {
     setLoggedIn(false);
     localStorage.removeItem("jwt");
     navigate("/");
+  }
+
+  // Check if the user logged in and if user has a token in local storage, check if it is valid.
+  useEffect(() => {
+    verifyToken();
+  }, [token, navigate]);
+
+  function verifyToken() {
+    if (token) {
+      console.log(token)
+      Auth
+        .checkToken(token)
+        .then((res) => {
+          setEmail(res.data.email);
+          setLoggedIn(true);
+          navigate('/');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      setLoggedIn(false);
+    }
   }
 
   // Close popups by esc key.
