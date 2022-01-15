@@ -59,9 +59,12 @@ function App() {
 
   const getUserInfo = async (token) => {
     try {
-      const callData = await Api.getUserInfo(token);
-      console.log(callData)
-      callData && setCurrentUser(callData);
+      await Api.getUserInfo(token).then(res => {
+        console.log(res)
+        console.log(res.email)
+        setCurrentUser(res);
+        setEmail(res.email);
+      })
     } catch (error) {
       console.log(error);
     }
@@ -223,7 +226,6 @@ function App() {
       Auth
         .checkToken(token)
         .then((res) => {
-          setEmail(res.data.email);
           setLoggedIn(true);
           navigate('/');
         })
