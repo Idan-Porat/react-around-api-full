@@ -53,7 +53,7 @@ function App() {
 
   const [email, setEmail] = useState("");
 
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState(localStorage.getItem("jwt"));
 
 
   // Check if the user logged in and if user has a token in local storage, check if it is valid.
@@ -156,8 +156,6 @@ function App() {
       return Api
         .setUserInfo(data, token)
         .then((res) => {
-          console.log(res)
-          console.log(token)
           setCurrentUser(res)
           closeAllPopups();
         })
@@ -229,7 +227,8 @@ function App() {
   const handleLogOut = () => {
     console.log("logged out");
     setLoggedIn(false);
-    localStorage.removeItem("jwt");
+    console.log(localStorage.removeItem("jwt", token))
+    localStorage.removeItem("jwt", token);
     navigate("/");
   }
 
