@@ -161,6 +161,8 @@ function App() {
       return Api
         .setUserInfo(data, token)
         .then((res) => {
+          console.log(res)
+          console.log(token)
           setCurrentUser(res)
           closeAllPopups();
         })
