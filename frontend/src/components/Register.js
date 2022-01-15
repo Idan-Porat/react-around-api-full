@@ -21,7 +21,7 @@ function Register(props) {
             loggedIn={loggedIn}
             onSubmit={handleSubmit}
             onChangeEmail={(e) => setEmail(e.target.value)}
-            inChangePassword={(e) => setPassword(e.target.value)}
+            onChangePassword={(e) => setPassword(e.target.value)}
             valueEmail={email}
             valuePassword={password}
         />
