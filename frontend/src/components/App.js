@@ -63,7 +63,7 @@ function App() {
       Auth
         .checkToken(token)
         .then((res) => {
-          setEmail(res.data.email);
+          setEmail(res.email);
           setLoggedIn(true);
           navigate('/');
         })
@@ -73,7 +73,7 @@ function App() {
     } else {
       setLoggedIn(false);
     }
-  }, [token, navigate]);
+  }, [navigate, token]);
 
   const getUserInfo = async (token) => {
     try {
@@ -88,12 +88,19 @@ function App() {
   //Get user info and cards.
   useEffect(() => {
     if (token) {
-      getUserInfo(token);
-      Api.getInitialCards(token)
-        .then(res => {
-          console.log(res)
-          setCards(res)
-        }).catch((error) => console.log(error))
+      Api
+        .getUserInfo(token)
+        .then((res) => {
+          console.log(res);
+          setCurrentUser(res);
+          Api
+            .getInitialCards(token)
+            .then((cards) => {
+              setCards(cards);
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => console.log(err));
     }
   }, [token])
 
