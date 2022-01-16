@@ -60,7 +60,6 @@ function App() {
   // Check if the user logged in and if user has a token in local storage, check if it is valid.
   useEffect(() => {
     if (token) {
-      console.log(token)
       Auth
         .checkToken(token)
         .then((res) => {
@@ -92,7 +91,6 @@ function App() {
       getUserInfo(token);
       Api.getInitialCards(token)
         .then(res => {
-          console.log(res)
           setCards(res)
         })
         .catch((error) => console.log(error))
@@ -197,7 +195,6 @@ function App() {
     return Auth.authorize(email, password)
       .then((data) => {
         if (data.token) {
-          console.log(data.token)
           setToken(data.token);
           setLoggedIn(!loggedIn);
           navigate('/');
