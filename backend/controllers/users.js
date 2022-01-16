@@ -44,8 +44,8 @@ module.exports.getUser = (req, res, next) => {
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
-  const { _id } = req.user;
-  return User.findOne(_id)
+  const { email } = req.body;
+  return User.findOne(email)
     .orFail(() => {
       const error = new Error('user not found');
       error.statusCode = ERR_CODE_404;
