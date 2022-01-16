@@ -14,5 +14,8 @@ All other directories are optional and may be created by the developer if necess
   
 `npm run dev` — to launch the server with the hot reload feature.  
 
+`Domain names` - https://around-porat.students.nomoreparties.sbs/
+https://api.around-porat.students.nomoreparties.sbs/
+https://www.around-porat.students.nomoreparties.sbs/
 
 

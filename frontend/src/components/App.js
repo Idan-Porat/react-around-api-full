@@ -51,6 +51,7 @@ function App() {
   // Login state
   const [loggedIn, setLoggedIn] = useState(false);
 
+  // Email state of the user
   const [email, setEmail] = useState("");
 
   const [token, setToken] = useState(localStorage.getItem("jwt"));
@@ -78,8 +79,6 @@ function App() {
   const getUserInfo = async (token) => {
     try {
       return await Api.getUserInfo(token).then(res => {
-        console.log(res)
-        console.log(res.email)
         setCurrentUser(res);
       })
     } catch (error) {
