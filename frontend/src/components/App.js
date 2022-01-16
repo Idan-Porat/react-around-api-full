@@ -58,10 +58,10 @@ function App() {
 
   // Check if the user logged in and if user has a token in local storage, check if it is valid.
   useEffect(() => {
-    if (localStorage.getItem("jwt")) {
-      console.log(localStorage.getItem("jwt"))
+    if (token) {
+      console.log(token)
       Auth
-        .checkToken(localStorage.getItem("jwt"))
+        .checkToken(token)
         .then((res) => {
           setEmail(res.email);
           setLoggedIn(true);
@@ -73,11 +73,11 @@ function App() {
     } else {
       setLoggedIn(false);
     }
-  }, [loggedIn]);
+  }, [token]);
 
   const getUserInfo = async (token) => {
     try {
-      return Api.getUserInfo(token).then(res => {
+      return await Api.getUserInfo(token).then(res => {
         console.log(res)
         console.log(res.email)
         setCurrentUser(res);
@@ -89,8 +89,8 @@ function App() {
 
   //Get user info and cards.
   useEffect(() => {
-    if (localStorage.getItem("jwt")) {
-      getUserInfo(localStorage.getItem("jwt"));
+    if (token) {
+      getUserInfo(token);
       Api.getInitialCards(token)
         .then(res => {
           console.log(res)
@@ -98,7 +98,7 @@ function App() {
         })
         .catch((error) => console.log(error))
     }
-  }, [loggedIn])
+  }, [token])
 
   const handleCardLike = (card) => {
     const isLiked = card.likes.some((i) => i === currentUser._id);
@@ -227,8 +227,7 @@ function App() {
   const handleLogOut = () => {
     console.log("logged out");
     setLoggedIn(false);
-    console.log(localStorage.removeItem("jwt", token))
-    localStorage.removeItem("jwt", token);
+    localStorage.removeItem("jwt");
     navigate("/");
   }
 
