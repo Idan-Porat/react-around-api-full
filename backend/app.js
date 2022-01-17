@@ -11,7 +11,6 @@ const cardRouter = require('./routes/cards');
 const auth = require('./middleware/auth');
 const { createUser, login } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middleware/logger');
-const { validateUrl } = require('./middleware/validateUrl');
 
 const { PORT = 3000, BASE_PATH } = process.env;
 const app = express();
@@ -53,13 +52,13 @@ app.get('/crash-test', () => {
 
 app.post('/signup', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().email().custom(validateUrl),
+    email: Joi.string().email(),
     password: Joi.string().required().min(3),
   }),
 }), createUser);
 app.post('/signin', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().email().custom(validateUrl),
+    email: Joi.string().email(),
     password: Joi.string().required().min(3),
   }),
 }), login);
