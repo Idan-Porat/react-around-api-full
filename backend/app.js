@@ -16,9 +16,7 @@ const { validateUrl } = require('./middleware/validateUrl');
 const { PORT = 3000, BASE_PATH } = process.env;
 const app = express();
 app.use(helmet());
-app.use(cors({
-  origin: 'https://around-porat.students.nomoreparties.sbs',
-}));
+app.use(cors());
 app.options('*', cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -58,7 +56,12 @@ app.post('/signup', celebrate({
     password: Joi.string().required().min(3),
   }),
 }), createUser);
-app.post('/signin', login);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().custom(validateUrl),
+    password: Joi.string().required().min(3),
+  }),
+}), login);
 
 app.use('/', auth, userRouter);
 app.use('/', auth, cardRouter);
