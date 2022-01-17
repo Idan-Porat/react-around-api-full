@@ -11,7 +11,7 @@ const ERR_CODE_500 = 500;
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getAllUsers = (req, res) => {
-  User.find({})
+  return User.find({})
     .orFail(() => {
       const error = new Error('users not found');
       error.statusCode = ERR_CODE_404;
@@ -44,7 +44,7 @@ module.exports.getUser = (req, res, next) => {
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
-  User.findOne({ _id: req.user._id })
+  return User.findOne({ _id: req.user._id })
     .then((user) => {
       if (!user) {
         throw new ErrorHandler('No user with matching ID found', ERR_CODE_404);
