@@ -10,24 +10,26 @@ const ERR_CODE_404 = 404;
 const ERR_CODE_500 = 500;
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-module.exports.getAllUsers = (req, res) => User.find({})
-  .orFail(() => {
-    const error = new Error('users not found');
-    error.statusCode = ERR_CODE_404;
-    throw error;
-  })
-  .then((user) => {
-    res.status(STAT_CODE_200).send(user);
-  })
-  .catch((err) => {
-    if (err.name === 'CastError') {
-      res.status(ERR_CODE_400).send(err);
-    } else if (err.statusCode === ERR_CODE_404) {
-      res.status(ERR_CODE_404).send(err);
-    } else {
-      res.status(ERR_CODE_500).send({ err } || 'internal server error');
-    }
-  });
+module.exports.getAllUsers = (req, res) => {
+  User.find({})
+    .orFail(() => {
+      const error = new Error('users not found');
+      error.statusCode = ERR_CODE_404;
+      throw error;
+    })
+    .then((user) => {
+      res.status(STAT_CODE_200).send(user);
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(ERR_CODE_400).send(err);
+      } else if (err.statusCode === ERR_CODE_404) {
+        res.status(ERR_CODE_404).send(err);
+      } else {
+        res.status(ERR_CODE_500).send({ err } || 'internal server error');
+      }
+    });
+};
 
 module.exports.getUser = (req, res, next) => {
   const { userId } = req.params;
@@ -41,14 +43,16 @@ module.exports.getUser = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.getCurrentUser = (req, res, next) => User.findOne({ _id: req.user._id })
-  .then((user) => {
-    if (!user) {
-      throw new ErrorHandler('No user with matching ID found', ERR_CODE_404);
-    }
-    res.send(user);
-  })
-  .catch(next);
+module.exports.getCurrentUser = (req, res, next) => {
+  User.findOne({ _id: req.user._id })
+    .then((user) => {
+      if (!user) {
+        throw new ErrorHandler('No user with matching ID found', ERR_CODE_404);
+      }
+      res.send(user);
+    })
+    .catch(next);
+};
 
 module.exports.createUser = (req, res, next) => {
   const { password } = req.body;
