@@ -41,17 +41,14 @@ module.exports.getUser = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.getCurrentUser = (req, res, next) => {
-  const { _id } = req.user;
-  return User.findOne({ _id })
-    .then((user) => {
-      if (!user) {
-        throw new ErrorHandler('No user with matching ID found', ERR_CODE_404);
-      }
-      res.send(user);
-    })
-    .catch(next);
-};
+module.exports.getCurrentUser = (req, res, next) => User.findOne({ _id: req.user._id })
+  .then((user) => {
+    if (!user) {
+      throw new ErrorHandler('No user with matching ID found', ERR_CODE_404);
+    }
+    res.send(user);
+  })
+  .catch(next);
 
 module.exports.createUser = (req, res, next) => {
   const { password } = req.body;
