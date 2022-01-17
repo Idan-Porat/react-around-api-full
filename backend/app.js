@@ -58,12 +58,7 @@ app.post('/signup', celebrate({
     password: Joi.string().required().min(3),
   }),
 }), createUser);
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().email().custom(validateUrl),
-    password: Joi.string().required().min(3),
-  }),
-}), login);
+app.post('/signin', login);
 
 app.use('/', auth, userRouter);
 app.use('/', auth, cardRouter);
