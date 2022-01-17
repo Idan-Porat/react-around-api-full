@@ -73,7 +73,7 @@ app.use((req, res, next) => {
   res.status(404).send({ message: `Route ${req.url} Not found.` });
   next();
 });
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   // if an error has no status, display 500
   const { statusCode = 500, message } = err;
   res
@@ -84,6 +84,7 @@ app.use((err, req, res) => {
         ? 'An error occurred on the server'
         : message,
     });
+  next();
 });
 
 app.listen(PORT, () => {
