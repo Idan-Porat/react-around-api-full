@@ -7,16 +7,7 @@ const {
 
 cardRouter.post('/cards', createCard);
 cardRouter.get('/cards', getCards);
-cardRouter.delete('/cards/:cardId', celebrate({
-  body: Joi.object().keys({
-    owner: Joi.object().keys({
-      _id: Joi.string().hex().required(),
-    }).unknown(true),
-  }).unknown(true),
-  params: Joi.object().keys({
-    cardId: Joi.string().hex().required(),
-  }).unknown(true),
-}), deleteCard);
+cardRouter.delete('/cards/:cardId', deleteCard);
 cardRouter.put('/cards/:cardId/likes', likeCard);
 cardRouter.delete('/cards/:cardId/likes', dislikeCard);
 

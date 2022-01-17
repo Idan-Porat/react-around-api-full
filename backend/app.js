@@ -50,18 +50,8 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().email(),
-    password: Joi.string().required().min(3),
-  }),
-}), createUser);
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().email(),
-    password: Joi.string().required().min(3),
-  }),
-}), login);
+app.post('/signup', createUser);
+app.post('/signin', login);
 
 app.use('/', auth, userRouter);
 app.use('/', auth, cardRouter);
@@ -84,7 +74,6 @@ app.use((err, req, res, next) => {
         ? 'An error occurred on the server'
         : message,
     });
-  next();
 });
 
 app.listen(PORT, () => {
