@@ -3,8 +3,6 @@ const cors = require('cors');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const { celebrate } = require('celebrate');
-const Joi = require('joi');
 const { errors } = require('celebrate');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
@@ -17,6 +15,8 @@ const app = express();
 app.use(helmet());
 app.use(cors());
 app.options('*', cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   res.setHeader(
@@ -37,9 +37,6 @@ app.use((req, res, next) => {
   );
   next();
 });
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 mongoose.connect('mongodb://localhost:27017/aroundb');
 app.use(requestLogger);
@@ -74,6 +71,7 @@ app.use((err, req, res, next) => {
         ? 'An error occurred on the server'
         : message,
     });
+  next();
 });
 
 app.listen(PORT, () => {
