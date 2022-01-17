@@ -3,6 +3,8 @@ const cors = require('cors');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { celebrate } = require('celebrate');
+const Joi = require('joi');
 const { errors } = require('celebrate');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
@@ -48,8 +50,18 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signup', createUser);
-app.post('/signin', login);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email(),
+    password: Joi.string().required().min(3),
+  }),
+}), createUser);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email(),
+    password: Joi.string().required().min(3),
+  }),
+}), login);
 
 app.use('/', auth, userRouter);
 app.use('/', auth, cardRouter);
