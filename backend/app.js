@@ -1,42 +1,44 @@
 const express = require('express');
 const cors = require('cors');
-const helmet = require("helmet");
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const { celebrate, Joi } = require('celebrate');
+const { errors } = require('celebrate');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const auth = require('./middleware/auth');
 const { createUser, login } = require('./controllers/users');
-const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middleware/logger');
+const { validateUrl } = require('./middleware/validateUrl');
+
 const { PORT = 3000, BASE_PATH } = process.env;
-console.log(process.env.NODE_ENV);
 const app = express();
 app.use(helmet());
 app.use(cors());
-app.options("*", cors())
+app.options('*', cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   res.setHeader(
-    "Access-Control-Allow-Origin",
-    "https://around-porat.students.nomoreparties.sbs"
+    'Access-Control-Allow-Origin',
+    'https://around-porat.students.nomoreparties.sbs',
   );
   res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+    'Access-Control-Allow-Methods',
+    'GET, POST, OPTIONS, PUT, PATCH, DELETE',
   );
   res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type, Accept, authorization, Authorization",
+    'Access-Control-Allow-Headers',
+    'X-Requested-With,content-type, Accept, authorization, Authorization',
   );
   res.setHeader(
-    "Access-Control-Allow-Credentials",
-    true
+    'Access-Control-Allow-Credentials',
+    true,
   );
   next();
-})
+});
 
 mongoose.connect('mongodb://localhost:27017/aroundb');
 app.use(requestLogger);
@@ -47,8 +49,18 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signup', createUser);
-app.post('/signin', login);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().custom(validateUrl),
+    password: Joi.string().required().min(8),
+  }),
+}), createUser);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().custom(validateUrl),
+    password: Joi.string().required().min(8),
+  }),
+}), login);
 
 app.use('/', auth, userRouter);
 app.use('/', auth, cardRouter);
@@ -56,7 +68,11 @@ app.use('/', auth, cardRouter);
 app.use(errorLogger); // enabling the error logger
 app.use(errors());
 
-app.use((err, req, res, next) => {
+app.use((req, res, next) => {
+  res.status(404).send({ message: `Route ${req.url} Not found.` });
+  next();
+});
+app.use((err, req, res) => {
   // if an error has no status, display 500
   const { statusCode = 500, message } = err;
   res
@@ -65,7 +81,7 @@ app.use((err, req, res, next) => {
       // check the status and display a message based on it
       message: statusCode === 500
         ? 'An error occurred on the server'
-        : message
+        : message,
     });
 });
 
