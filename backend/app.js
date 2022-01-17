@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const helmet = require('helmet');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
@@ -11,7 +12,7 @@ const { requestLogger, errorLogger } = require('./middleware/logger');
 
 const { PORT = 3000, BASE_PATH } = process.env;
 const app = express();
-
+app.use(helmet());
 app.use(cors());
 app.options('*', cors());
 app.use(bodyParser.json());
@@ -28,7 +29,7 @@ app.use((req, res, next) => {
   );
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'X-Requested-With,content-type, Accept, authorization, Authorization',
+    'Origin, X-Requested-With, content-type, Accept',
   );
   res.setHeader(
     'Access-Control-Allow-Credentials',
@@ -70,7 +71,6 @@ app.use((err, req, res, next) => {
         ? 'An error occurred on the server'
         : message,
     });
-  next();
 });
 
 app.listen(PORT, () => {
