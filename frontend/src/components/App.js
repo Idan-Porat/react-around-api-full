@@ -252,13 +252,13 @@ function App() {
         <div className="root__wrapper">
           <Header title={findPath} email={email} loggedIn={loggedIn} onLogOut={handleLogOut} />
           <Routes>
-            <Route path='/signin' element={<Login
+            {!currentUser && <Route path='/signin' element={<Login
               setEmail={setEmail}
               email={email}
               handleLogin={handleLogin}
               loggedIn={loggedIn}
             />}>
-            </Route>
+            </Route> }
             <Route path='/signup' element={<Register
               loggedIn={loggedIn}
               setIsMessageOfRegPopupOpen={setIsMessageOfRegPopupOpen}
@@ -266,22 +266,23 @@ function App() {
             />}>
             </Route>
             <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-              <Route path='/' element={<Main
-                onEditProfileClick={handleEditProfileClick}
-                onAddPlaceClick={handleAddPlaceClick}
-                onEditAvatarClick={handleEditAvatarClick}
-                onCloseAllPopups={closeAllPopups}
-                cardClickHandler={handleCardClick}
-                onDeleteImagePopupOpen={handleDeleteImageClick}
-                onCardLike={handleCardLike}
-                cards={cards}
-                isEditAvatarPopupOpen={isEditAvatarPopupOpen}
-                isAddPlacePopupOpen={isAddPlacePopupOpen}
-                isEditProfilePopupOpen={isEditProfilePopupOpen}
-                isImageModalOpen={isImageModalOpen}
-                isDeleteImagePopupOpen={isDeleteImagePopupOpen}
-                cardData={selectedCard}
-              />} />
+              <Route path='/' element={currentUser && <Main
+              onEditProfileClick={handleEditProfileClick}
+              onAddPlaceClick={handleAddPlaceClick}
+              onEditAvatarClick={handleEditAvatarClick}
+              onCloseAllPopups={closeAllPopups}
+              cardClickHandler={handleCardClick}
+              onDeleteImagePopupOpen={handleDeleteImageClick}
+              onCardLike={handleCardLike}
+              cards={cards}
+              isEditAvatarPopupOpen={isEditAvatarPopupOpen}
+              isAddPlacePopupOpen={isAddPlacePopupOpen}
+              isEditProfilePopupOpen={isEditProfilePopupOpen}
+              isImageModalOpen={isImageModalOpen}
+              isDeleteImagePopupOpen={isDeleteImagePopupOpen}
+              cardData={selectedCard}
+              > 
+              </Main>} />
             </Route>
           </Routes>
           <Footer />
