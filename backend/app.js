@@ -69,12 +69,8 @@ app.use('/', auth, cardRouter);
 app.use(errorLogger); // enabling the error logger
 app.use(errors());
 
-app.use((req, res, next) => {
-  res.send(() => {
-    throw new ErrorHandler(`Route ${req.url} Not found.`, 404);
-  });
-  next();
-});
+userRouter.get('*', userRouter);
+cardRouter.get('*', cardRouter);
 
 app.use((err, req, res, next) => {
   res.send(() => {
