@@ -4,6 +4,8 @@ const helmet = require('helmet');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
+const { celebrate, Joi } = require('celebrate');
+const validateUrl = require('./middleware/validateUrl');
 const userRouter = require('./routes/users');
 const cardRouter = require('./routes/cards');
 const auth = require('./middleware/auth');
@@ -47,14 +49,29 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signup', createUser);
-app.post('/signin', login);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().custom(validateUrl),
+    password: Joi.string().required().min(4),
+  }),
+}), createUser);
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().email().custom(validateUrl),
+    password: Joi.string().required().min(4),
+  }),
+}), login);
 
 app.use('/', auth, userRouter);
 app.use('/', auth, cardRouter);
 
 app.use(errorLogger); // enabling the error logger
 app.use(errors());
+
+app.use((req, res, next) => {
+  res.status(404).send({ message: `Route ${req.url} Not found.` });
+  next();
+});
 
 app.use((err, req, res, next) => {
   // if an error has no status, display 500
