@@ -252,7 +252,7 @@ function App() {
         <div className="root__wrapper">
           <Header title={findPath} email={email} loggedIn={loggedIn} onLogOut={handleLogOut} />
           <Routes>
-            { <Route path='/signin' element={<Login
+            { !loggedIn && <Route path='/signin' element={<Login
               setEmail={setEmail}
               email={email}
               handleLogin={handleLogin}
@@ -266,7 +266,7 @@ function App() {
             />}>
             </Route>
             <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-              <Route path='/' element={currentUser && <Main
+              <Route path='/' element={loggedIn && <Main
               onEditProfileClick={handleEditProfileClick}
               onAddPlaceClick={handleAddPlaceClick}
               onEditAvatarClick={handleEditAvatarClick}
