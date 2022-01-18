@@ -3,8 +3,8 @@ const ErrorHandler = require('../middleware/errorHandler');
 
 const STAT_CODE_200 = 200;
 const ERR_CODE_400 = 400;
+const ERR_CODE_403 = 403;
 const ERR_CODE_404 = 404;
-const ERR_CODE_500 = 500;
 
 module.exports.getCards = (req, res, next) => Card.find({})
   .then((card) => {
@@ -41,24 +41,20 @@ module.exports.createCard = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.deleteCard = (req, res) => {
+module.exports.deleteCard = (req, res, next) => {
+  const { _id } = req.user;
   const { cardId } = req.params;
   return Card.findByIdAndRemove(cardId)
     .then((card) => {
       if (!card) {
-        throw new ErrorHandler('No card found', ERR_CODE_404);
+        throw new ErrorHandler('No card found by this id', ERR_CODE_404);
+      }
+      if (_id !== cardId) {
+        throw new ErrorHandler('You are not the owner of this card', ERR_CODE_403);
       }
       res.status(STAT_CODE_200).send(card);
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(ERR_CODE_400).send(err);
-      } else if (err.statusCode === ERR_CODE_404) {
-        res.status(ERR_CODE_404).send(err);
-      } else {
-        res.status(ERR_CODE_500).send({ err } || 'internal server error');
-      }
-    });
+    .catch(next);
 };
 
 module.exports.likeCard = (req, res, next) => {
