@@ -11,7 +11,6 @@ const { createUser, login } = require('./controllers/users');
 const { requestLogger, errorLogger } = require('./middleware/logger');
 
 const { PORT = 3000, BASE_PATH } = process.env;
-console.log(process.env.NODE_ENV);
 const app = express();
 app.use(helmet());
 app.use(cors());
