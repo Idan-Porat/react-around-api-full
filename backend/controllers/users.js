@@ -11,7 +11,7 @@ const ERR_CODE_500 = 500;
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getAllUsers = (req, res) => {
-  User.find({})
+  return User.find({})
     .orFail(() => {
       const error = new Error('users not found');
       error.statusCode = ERR_CODE_404;
