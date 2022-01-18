@@ -10,6 +10,7 @@ const ERR_CODE_404 = 404;
 const ERR_CODE_500 = 500;
 const { NODE_ENV, JWT_SECRET } = process.env;
 
+// eslint-disable-next-line arrow-body-style
 module.exports.getAllUsers = (req, res) => {
   return User.find({})
     .orFail(() => {
@@ -45,7 +46,8 @@ module.exports.getUser = (req, res, next) => {
 
 module.exports.getCurrentUser = (req, res, next) => {
   const { _id } = req.user;
-  return User.findOne({ _id })
+  // eslint-disable-next-line object-shorthand
+  return User.findOne({ _id: _id })
     .orFail(() => {
       const error = new Error('user not found');
       error.statusCode = ERR_CODE_404;
@@ -64,7 +66,10 @@ module.exports.createUser = (req, res, next) => {
   const { password } = req.body;
   return bcrypt
     .hash(password, 10)
-    .then((hash) => User.create({ email: req.body.email, password: hash }))
+    // eslint-disable-next-line arrow-body-style
+    .then((hash) => {
+      return User.create({ email: req.body.email, password: hash });
+    })
     .then((data) => {
       res.send({
         email: data.email,
