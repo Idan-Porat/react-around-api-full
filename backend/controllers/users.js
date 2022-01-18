@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken'); // importing the jsonwebtoken module
 const bcrypt = require('bcryptjs'); // importing bcrypt
 const User = require('../models/users');
-const ErrorHandler = require('../middleware/ErrorHandler');
+const ErrorHandler = require('../middleware/errorHandler');
 
 const STAT_CODE_200 = 200;
 const ERR_CODE_400 = 400;

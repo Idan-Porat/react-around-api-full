@@ -1,5 +1,5 @@
 const Card = require('../models/cards');
-const ErrorHandler = require('../middleware/ErrorHandler');
+const ErrorHandler = require('../middleware/errorHandler');
 
 const STAT_CODE_200 = 200;
 const ERR_CODE_400 = 400;
