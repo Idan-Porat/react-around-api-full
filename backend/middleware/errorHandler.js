@@ -1,8 +1,8 @@
-class errorHandler {
+class ErrorHandler {
   constructor(message, statusCode) {
-    this.message = message
+    this.message = message;
     this.statusCode = statusCode;
   }
 }
 
-module.exports = errorHandler;
+module.exports = ErrorHandler;

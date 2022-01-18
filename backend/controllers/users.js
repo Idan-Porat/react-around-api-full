@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken'); // importing the jsonwebtoken module
 const bcrypt = require('bcryptjs'); // importing bcrypt
 const User = require('../models/users');
-const errorhandler = require('../middleware/errorHandler')
+const ErrorHandler = require('../middleware/ErrorHandler');
 
 const STAT_CODE_200 = 200;
 const ERR_CODE_400 = 400;
@@ -11,7 +11,7 @@ const ERR_CODE_500 = 500;
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getAllUsers = (req, res) => {
-  return User.find({})
+  User.find({})
     .orFail(() => {
       const error = new Error('users not found');
       error.statusCode = ERR_CODE_404;
@@ -36,7 +36,7 @@ module.exports.getUser = (req, res, next) => {
   return User.findById({ _id: userId })
     .then((user) => {
       if (!user) {
-        throw new errorhandler('No user with matching ID found', 404);
+        throw new ErrorHandler('No user with matching ID found', 404);
       }
       res.send(user);
     })
@@ -45,7 +45,7 @@ module.exports.getUser = (req, res, next) => {
 
 module.exports.getCurrentUser = (req, res, next) => {
   const { _id } = req.user;
-  return User.findOne({ _id: _id })
+  return User.findOne({ _id })
     .orFail(() => {
       const error = new Error('user not found');
       error.statusCode = ERR_CODE_404;
@@ -53,7 +53,7 @@ module.exports.getCurrentUser = (req, res, next) => {
     })
     .then((user) => {
       if (!user) {
-        throw new errorhandler('user not found', ERR_CODE_404);
+        throw new ErrorHandler('user not found', ERR_CODE_404);
       }
       res.send(user);
     })
@@ -61,12 +61,10 @@ module.exports.getCurrentUser = (req, res, next) => {
 };
 
 module.exports.createUser = (req, res, next) => {
-  const { email, password } = req.body;
+  const { password } = req.body;
   return bcrypt
     .hash(password, 10)
-    .then((hash) => {
-      return User.create({ email: req.body.email, password: hash });
-    })
+    .then((hash) => User.create({ email: req.body.email, password: hash }))
     .then((data) => {
       res.send({
         email: data.email,
@@ -74,11 +72,11 @@ module.exports.createUser = (req, res, next) => {
         about: data.about,
         avatar: data.avatar,
         _id: data._id,
-      })
+      });
     })
     .then((user) => {
       if (!user) {
-        throw new errorhandler('Unsuccessful Request', 400);
+        throw new ErrorHandler('Unsuccessful Request', 400);
       }
       res.send({ user });
     })
