@@ -10,7 +10,6 @@ const ERR_CODE_404 = 404;
 const ERR_CODE_500 = 500;
 const { NODE_ENV, JWT_SECRET } = process.env;
 
-// eslint-disable-next-line arrow-body-style
 module.exports.getAllUsers = (req, res) => {
   return User.find({})
     .orFail(() => {
@@ -37,7 +36,7 @@ module.exports.getUser = (req, res, next) => {
   return User.findById({ _id: userId })
     .then((user) => {
       if (!user) {
-        throw new ErrorHandler('No user with matching ID found', 404);
+        throw new ErrorHandler('No user with matching ID found', ERR_CODE_404);
       }
       res.send(user);
     })
@@ -46,16 +45,10 @@ module.exports.getUser = (req, res, next) => {
 
 module.exports.getCurrentUser = (req, res, next) => {
   const { _id } = req.user;
-  // eslint-disable-next-line object-shorthand
   return User.findOne({ _id: _id })
-    .orFail(() => {
-      const error = new Error('user not found');
-      error.statusCode = ERR_CODE_404;
-      throw error;
-    })
     .then((user) => {
       if (!user) {
-        throw new ErrorHandler('user not found', ERR_CODE_404);
+        throw new ErrorHandler('No user with matching ID found', ERR_CODE_404);
       }
       res.send(user);
     })
@@ -66,7 +59,6 @@ module.exports.createUser = (req, res, next) => {
   const { password } = req.body;
   return bcrypt
     .hash(password, 10)
-    // eslint-disable-next-line arrow-body-style
     .then((hash) => {
       return User.create({ email: req.body.email, password: hash });
     })
@@ -81,7 +73,7 @@ module.exports.createUser = (req, res, next) => {
     })
     .then((user) => {
       if (!user) {
-        throw new ErrorHandler('Unsuccessful Request', 400);
+        throw new ErrorHandler('Unsuccessful Request', ERR_CODE_400);
       }
       res.send({ user });
     })
