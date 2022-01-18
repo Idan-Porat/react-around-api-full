@@ -8,7 +8,7 @@ function Card(props) {
     const isOwn = card.owner === currentUser._id;
     // Creating a variable which you'll then set in `className` for the delete button
     const cardDeleteButtonClassName = (
-        'elements__delete-button_active'
+        `elements__delete-button ${isOwn ? 'elements__delete-button_active' : 'elements__delete-button_hidden'}`
     );
 
     // Check if the card was liked by the current user
