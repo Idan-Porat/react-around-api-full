@@ -21,6 +21,8 @@ import successToLog from "../images/successLogin.png";
 
 function App() {
 
+  const [items, setItems] = useState();
+
   const navigate = useNavigate();
 
   const [cards, setCards] = useState([]);
@@ -252,7 +254,7 @@ function App() {
         <div className="root__wrapper">
           <Header title={findPath} email={email} loggedIn={loggedIn} onLogOut={handleLogOut} />
           <Routes>
-            { !loggedIn && <Route path='/signin' element={<Login
+            { email === "" && <Route path='/signin' element={<Login
               setEmail={setEmail}
               email={email}
               handleLogin={handleLogin}
@@ -266,7 +268,7 @@ function App() {
             />}>
             </Route>
             <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-              <Route path='/' element={loggedIn && <Main
+              <Route path='/' element={email !== "" && <Main
               onEditProfileClick={handleEditProfileClick}
               onAddPlaceClick={handleAddPlaceClick}
               onEditAvatarClick={handleEditAvatarClick}
