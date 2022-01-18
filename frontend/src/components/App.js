@@ -266,7 +266,7 @@ function App() {
             />}>
             </Route>
             <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-              {currentUser && cards && <Route path='/' element={<Main
+              {currentUser._id && <Route path='/' element={<Main
                 onEditProfileClick={handleEditProfileClick}
                 onAddPlaceClick={handleAddPlaceClick}
                 onEditAvatarClick={handleEditAvatarClick}
