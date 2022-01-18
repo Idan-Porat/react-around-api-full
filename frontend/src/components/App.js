@@ -252,7 +252,7 @@ function App() {
         <div className="root__wrapper">
           <Header title={findPath} email={email} loggedIn={loggedIn} onLogOut={handleLogOut} />
           <Routes>
-            {!currentUser && <Route path='/signin' element={<Login
+            {(currentUser === {}) && <Route path='/signin' element={<Login
               setEmail={setEmail}
               email={email}
               handleLogin={handleLogin}
