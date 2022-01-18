@@ -48,8 +48,7 @@ module.exports.deleteCard = (req, res, next) => {
     .then((card) => {
       if (!card) {
         throw new ErrorHandler('No card found by this id', ERR_CODE_404);
-      }
-      if (_id !== cardId) {
+      } else if (_id !== card.owner) {
         throw new ErrorHandler('You are not the owner of this card', ERR_CODE_403);
       }
       res.status(STAT_CODE_200).send(card);
