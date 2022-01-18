@@ -17,7 +17,6 @@ class Api {
                 "content-type": "application/json",
                 authorization: `Bearer ${token}`,
             },
-            method: 'GET',
         })
             .then(res => this._getResponseData(res))
     }
@@ -28,7 +27,6 @@ class Api {
                 "content-type": "application/json",
                 authorization: `Bearer ${token}`,
             },
-            method: 'POST',
         })
             .then(res => this._getResponseData(res))
     }
