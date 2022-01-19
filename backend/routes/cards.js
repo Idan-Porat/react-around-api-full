@@ -5,7 +5,12 @@ const {
   getCards, createCard, deleteCard, likeCard, dislikeCard,
 } = require('../controllers/cards');
 
-cardRouter.post('/cards', createCard);
+cardRouter.post('/cards', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required(),
+    password: Joi.string().hex().required().min(4),
+  }),
+}), createCard);
 cardRouter.get('/cards', getCards);
 cardRouter.delete('/cards/:cardId', celebrate({
   body: Joi.object().keys({

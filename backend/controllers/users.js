@@ -7,6 +7,7 @@ const STAT_CODE_200 = 200;
 const ERR_CODE_400 = 400;
 const ERR_CODE_401 = 401;
 const ERR_CODE_404 = 404;
+const ERR_CODE_409 = 409;
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getAllUsers = (req, res, next) => User.find({})
@@ -43,7 +44,7 @@ module.exports.getCurrentUser = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.createUser = (req, res, next) => {
+module.exports.createUser = (req, res) => {
   const { password } = req.body;
   return bcrypt
     .hash(password, 10)
@@ -63,7 +64,12 @@ module.exports.createUser = (req, res, next) => {
       }
       res.status(STAT_CODE_200).send({ user });
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === 'MongoError' && err.code === 11000) {
+        // Duplicate email
+        res.status(ERR_CODE_409).send({ succes: false, message: 'User already exist!' });
+      }
+    });
 };
 
 module.exports.updateProfile = (req, res, next) => {
