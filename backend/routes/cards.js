@@ -9,7 +9,7 @@ cardRouter.post('/cards', celebrate({
   body: Joi.object().keys({
     email: Joi.string().required(),
     password: Joi.string().hex().required().min(4),
-  }),
+  }).unknown(true),
 }), createCard);
 cardRouter.get('/cards', getCards);
 cardRouter.delete('/cards/:cardId', celebrate({
