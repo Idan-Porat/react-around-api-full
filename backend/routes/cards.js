@@ -7,8 +7,8 @@ const {
 
 cardRouter.post('/cards', celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required(),
-    password: Joi.string().hex().required().min(4),
+    name: Joi.string().required().min(2).max(30),
+    imageLink: Joi.string().hex().required(),
   }).unknown(true),
 }), createCard);
 cardRouter.get('/cards', getCards);
