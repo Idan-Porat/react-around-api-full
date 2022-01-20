@@ -84,7 +84,7 @@ module.exports.updateProfile = (req, res, next) => {
       if (!user) {
         throw new ErrorHandler('Unsuccessful Request', ERR_CODE_400);
       }
-      res.status(STAT_CODE_200).send({ user });
+      res.status(STAT_CODE_200).send(user);
     })
     .catch(next);
 };
@@ -101,7 +101,7 @@ module.exports.updateAvatar = (req, res, next) => {
       if (!user) {
         throw new ErrorHandler('Unsuccessful Request', ERR_CODE_400);
       }
-      res.status(STAT_CODE_200).send({ user });
+      res.status(STAT_CODE_200).send(user);
     })
     .catch(next);
 };
