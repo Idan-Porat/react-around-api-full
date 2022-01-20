@@ -18,7 +18,15 @@ userRouter.get('/users/:userId', celebrate({
       userId: Joi.string().hex().required(),
     }).unknown(true),
 }), getUser);
-userRouter.patch('/users/me', updateProfile);
+userRouter.patch('/users/me', celebrate({
+  body: Joi.object().keys({
+    user: Joi.object().keys({
+      _id: Joi.string().hex().required(),
+      name: Joi.string().required().min(2).max(30),
+      about: Joi.string().required().min(2).max(30),
+    }).unknown(true),
+  }).unknown(true),
+}), updateProfile);
 userRouter.patch('/users/me/avatar', celebrate({
   body: Joi.object().keys({
     user: Joi.object().keys({
