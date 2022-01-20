@@ -9,9 +9,7 @@ userRouter.get('/users', getAllUsers);
 userRouter.get('/users/me', getCurrentUser);
 userRouter.get('/users/:userId', celebrate({
   body: Joi.object().keys({
-    user: Joi.object().keys({
-      _id: Joi.string().hex().required(),
-    }).unknown(true),
+    _id: Joi.string().hex().required(),
   }).unknown(true),
   params: Joi.object()
     .keys({
@@ -21,9 +19,7 @@ userRouter.get('/users/:userId', celebrate({
 userRouter.patch('/users/me', updateProfile);
 userRouter.patch('/users/me/avatar', celebrate({
   body: Joi.object().keys({
-    user: Joi.object().keys({
-      _id: Joi.string().hex().required(),
-    }).unknown(true),
+    _id: Joi.string().hex().required(),
   }).unknown(true),
   params: Joi.object()
     .keys({
