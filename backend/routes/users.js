@@ -27,7 +27,7 @@ userRouter.patch('/users/me/avatar', celebrate({
   }).unknown(true),
   params: Joi.object()
     .keys({
-      avatar: Joi.string().required(),
+      avatar: Joi.string().hex().required(),
     }).unknown(true),
 }), updateAvatar);
 module.exports = userRouter;
