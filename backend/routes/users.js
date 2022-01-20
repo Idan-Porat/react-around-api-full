@@ -19,5 +19,12 @@ userRouter.get('/users/:userId', celebrate({
     }).unknown(true),
 }), getUser);
 userRouter.patch('/users/me', updateProfile);
-userRouter.patch('/users/me/avatar', updateAvatar);
+userRouter.patch('/users/me/avatar', celebrate({
+  body: Joi.object().keys({
+    user: Joi.object().keys({
+      _id: Joi.string().hex().required(),
+      avatar: Joi.string().required(),
+    }).unknown(true),
+  }).unknown(true),
+}), updateAvatar);
 module.exports = userRouter;
